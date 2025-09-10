@@ -1,12 +1,12 @@
-import Navbar from "@/Components/layout/Navbar";
-import HeroSection from "@/Components/section/HeroSection";
+import Navbar from "@/Components/section/Navbar";
 import React from "react";
+import HeroSection2 from "@/Components/section/HeroSection2";
 
 export default function page() {
   return (
-    <div className="w-full h-screen bg-white ">
+    <div className="w-full h-screen overflow-hidden">
       <Navbar />
-      <HeroSection />
+      <HeroSection2 />
     </div>
   );
 }
