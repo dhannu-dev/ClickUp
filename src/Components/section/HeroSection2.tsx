@@ -16,6 +16,7 @@ import { BsLayoutThreeColumns } from "react-icons/bs";
 import { MdOutlineFilterList } from "react-icons/md";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdGroup } from "react-icons/md";
+import Todo from "../Todo";
 
 function HeroSection2() {
   return (
@@ -108,12 +109,12 @@ function HeroSection2() {
 
             <div className="flex items-center justify-center gap-1">
               <FaFlipboard />
-              <p className="text-sm">List</p>
+              <p className="text-sm">Board</p>
             </div>
 
             <div className="flex items-center justify-center gap-1">
               <FcCalendar />
-              <p className="text-sm">List</p>
+              <p className="text-sm">Calender</p>
             </div>
 
             <div className="flex items-center justify-center gap-1 border-l border-gray-700 px-2">
@@ -161,14 +162,15 @@ function HeroSection2() {
           </div>
         </div>
 
-        <div className="flex justify-center items-center flex-col h-[500px] text-gray-400">
-          <p className="w-1/2 text-center">
+        <div className=" h-[500px] text-gray-400">
+          {/* <p className="w-1/2 text-center">
             You have no existing Spaces to put shared tasks in. Create a Space
             now to organize your work.
           </p>
           <button className="px-3 cursor-pointer py-2 rounded-md bg-purple-700 text-white mt-3">
             Create new Space
-          </button>
+          </button> */}
+          <Todo />
         </div>
       </div>
     </div>
