@@ -1,3 +1,5 @@
+"use client";
+
 import { GoCodespaces } from "react-icons/go";
 import { CiCalendar } from "react-icons/ci";
 import { LuBrain } from "react-icons/lu";
@@ -17,8 +19,19 @@ import { MdOutlineFilterList } from "react-icons/md";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdGroup } from "react-icons/md";
 import Todo from "../Todo";
+import { useContext } from "react";
+import { TodoContext } from "../../context/TodoContext";
 
 function HeroSection2() {
+  const {
+    handleCreateTaskOption,
+    createTaskOption,
+    closeCreatedTaskOption,
+    createTaskOptionInput,
+    setCreatedTaskOptionInput,
+    addCreatedTask,
+  } = useContext(TodoContext);
+
   return (
     <div className="w-full h-screen flex px-2 py-1">
       <div className="h-full rounded-md p-2 space-y-5  w-[50px] bg-[#1e1e2f]">
@@ -56,10 +69,40 @@ function HeroSection2() {
       <div className="h-full bg-zinc-900 w-[350px] border border-gray-800 rounded-md p-3 ml-2">
         <div className="flex w-full justify-between items-center">
           <h2>Home</h2>
-          <button className="px-2 py-1 rounded-md bg-purple-700 text-white">
+          <button
+            onClick={handleCreateTaskOption}
+            className="px-2 py-1 cursor-pointer rounded-md bg-purple-700 text-white"
+          >
             + Create
           </button>
         </div>
+        {createTaskOption && (
+          <div
+            onClick={closeCreatedTaskOption}
+            className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-zinc-900 flex flex-col text-white w-[400px] p-6 rounded-lg shadow-lg"
+            >
+              <h1 className="mb-2 text-xl">✏️Create Task...</h1>
+              <input
+                type="text"
+                value={createTaskOptionInput}
+                onChange={(e) => setCreatedTaskOptionInput(e.target.value)}
+                placeholder="Enter your task."
+                className="w-full border p-2 rounded-md border-gray-500 outline-none text-gray-400"
+              />
+
+              <button
+                onClick={addCreatedTask}
+                className="mt-4 cursor-pointer px-4 py-2 bg-purple-700 text-white rounded-md"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        )}
         <div className="text-zinc-400 mt-1   space-y-1 p-1">
           <div className="flex items-center gap-3  hover:bg-zinc-800 p-1 rounded-md">
             <BsFillInboxFill />
