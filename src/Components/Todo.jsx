@@ -4,33 +4,14 @@ import { useEffect, useState } from "react";
 import { MdOutlinePeople } from "react-icons/md";
 import { CiCalendarDate, CiCircleRemove } from "react-icons/ci";
 
-interface SubTask {
-  id: number;
-  task: string;
-  status: "Pending" | "Completed";
-}
-
-interface Task {
-  id: number;
-  task: string;
-  status: "Pending" | "Progress" | "Completed";
-  assignedTo: string;
-  deadline: string;
-  subTasks: SubTask[];
-}
-
 export default function Todo() {
   const [input, setInput] = useState("");
-  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
-  const [openDropdownCheckbox, setOpenDropdownCheckbox] = useState<
-    number | null
-  >(null);
-  const [list, setList] = useState<Task[]>([]);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdownCheckbox, setOpenDropdownCheckbox] = useState(null);
+  const [list, setList] = useState([]);
 
   // 🔹 Track subtask input per task (so each task has its own input state)
-  const [subTaskInputs, setSubTaskInputs] = useState<{
-    [taskId: number]: string;
-  }>({});
+  const [subTaskInputs, setSubTaskInputs] = useState({});
 
   const users = ["dhannu", "rohit", "rupak", "himanshu"];
   const today = new Date().toISOString().split("T")[0];
@@ -51,24 +32,24 @@ export default function Todo() {
     setInput("");
   };
 
-  const assignUser = (id: number, user: string) => {
+  const assignUser = (id, user) => {
     setList((prev) =>
       prev.map((t) => (t.id === id ? { ...t, assignedTo: user } : t))
     );
     setOpenDropdown(null);
   };
 
-  const setDeadline = (id: number, date: string) => {
+  const setDeadline = (id, date) => {
     setList((prev) =>
       prev.map((t) => (t.id === id ? { ...t, deadline: date } : t))
     );
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id) => {
     setList((prev) => prev.filter((cur) => cur.id !== id));
   };
 
-  const addSubTask = (taskId: number, subTaskText: string) => {
+  const addSubTask = (taskId, subTaskText) => {
     if (!subTaskText.trim()) return;
     setList((prev) =>
       prev.map((t) =>
@@ -85,7 +66,7 @@ export default function Todo() {
     );
   };
 
-  const toggleSubTaskStatus = (taskId: number, subTaskId: number) => {
+  const toggleSubTaskStatus = (taskId, subTaskId) => {
     setList((prev) =>
       prev.map((t) =>
         t.id === taskId
@@ -105,7 +86,7 @@ export default function Todo() {
     );
   };
 
-  const deleteSubTask = (taskId: number, subTaskId: number) => {
+  const deleteSubTask = (taskId, subTaskId) => {
     setList((prev) =>
       prev.map((t) =>
         t.id === taskId
@@ -128,7 +109,7 @@ export default function Todo() {
   const pendingTasks = list.filter((t) => t.status === "Pending");
   const completedTask = list.filter((t) => t.status === "Completed");
 
-  const renderTaskRow = (cur: Task) => (
+  const renderTaskRow = (cur) => (
     <div
       key={cur.id}
       className="list p-1 px-2 mt-2 text-gray-400 text-sm flex flex-col border-t border-zinc-800 border-b w-full"

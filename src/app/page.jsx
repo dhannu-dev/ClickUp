@@ -1,6 +1,6 @@
-import Navbar from "@/Components/section/Navbar";
 import React from "react";
-import HeroSection2 from "@/Components/section/HeroSection2";
+import Navbar from "../Components/section/Navbar";
+import HeroSection2 from "../Components/section/HeroSection2";
 
 export default function page() {
   return (
