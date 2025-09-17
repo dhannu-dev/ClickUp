@@ -1,7 +1,7 @@
 "use client";
 
 import { GoCodespaces } from "react-icons/go";
-import { CiCalendar } from "react-icons/ci";
+import { CiCalendar, CiCalendarDate } from "react-icons/ci";
 import { LuBrain } from "react-icons/lu";
 import { CiSquareMore } from "react-icons/ci";
 import { BsFillInboxFill } from "react-icons/bs";
@@ -15,7 +15,7 @@ import { FcCalendar } from "react-icons/fc";
 import { LiaLayerGroupSolid } from "react-icons/lia";
 import { TbSubtask } from "react-icons/tb";
 import { BsLayoutThreeColumns } from "react-icons/bs";
-import { MdOutlineFilterList } from "react-icons/md";
+import { MdOutlineFilterList, MdOutlinePeople } from "react-icons/md";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdGroup } from "react-icons/md";
 import Todo from "../Todo";
@@ -30,6 +30,14 @@ function HeroSection2() {
     createTaskOptionInput,
     setCreatedTaskOptionInput,
     addCreatedTask,
+    setOpenDropdown,
+    openDropdown,
+    users,
+    assignUser,
+    selectedUser,
+    setSelectedUser,
+    setDeadlineOption,
+    deadlineOption,
   } = useContext(TodoContext);
 
   return (
@@ -93,6 +101,67 @@ function HeroSection2() {
                 placeholder="Enter your task."
                 className="w-full border p-2 rounded-md border-gray-500 outline-none text-gray-400"
               />
+
+              <div className="flex justify-between gap-4 mt-4">
+                {/* User Dropdown */}
+                <div className="relative w-1/2">
+                  <button
+                    onClick={() =>
+                      setOpenDropdown(
+                        openDropdown === "create" ? null : "create"
+                      )
+                    }
+                    className="flex items-center gap-2 px-3 py-2 w-full rounded-md border border-zinc-700 hover:bg-zinc-800 text-white"
+                  >
+                    {selectedUser ? (
+                      <>
+                        <div className="w-6 h-6 flex items-center justify-center rounded-full bg-purple-600 text-white text-sm">
+                          {selectedUser.charAt(0).toUpperCase()}
+                        </div>
+                        <span>{selectedUser}</span>
+                      </>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <MdOutlinePeople size={18} />
+                        <span className="text-sm text-gray-400">
+                          Assign User
+                        </span>
+                      </div>
+                    )}
+                  </button>
+
+                  {openDropdown === "create" && (
+                    <div className="absolute mt-1 w-full bg-zinc-900 border border-zinc-700 rounded-md shadow-md z-50">
+                      {users.map((user) => (
+                        <button
+                          key={user}
+                          onClick={() => {
+                            setSelectedUser(user);
+                            setOpenDropdown(null);
+                          }}
+                          className="block w-full px-3 py-2 text-left text-sm text-white hover:bg-zinc-800"
+                        >
+                          {user}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Deadline Input */}
+                <div className="w-1/2">
+                  <label className="flex items-center gap-2 px-3 py-2 w-full rounded-md border border-zinc-700 hover:bg-zinc-800 cursor-pointer text-gray-300">
+                    <CiCalendarDate size={18} />
+                    <input
+                      type="date"
+                      value={deadlineOption}
+                      onChange={(e) => setDeadlineOption(e.target.value)}
+                      min={new Date().toISOString().split("T")[0]} // prevents past dates
+                      className="bg-transparent outline-none text-white text-sm flex-1"
+                    />
+                  </label>
+                </div>
+              </div>
 
               <button
                 onClick={addCreatedTask}

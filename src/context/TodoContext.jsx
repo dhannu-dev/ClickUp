@@ -15,6 +15,8 @@ export function TodoProvider({ children }) {
   const [subTaskInputs, setSubTaskInputs] = useState({});
   const [createTaskOption, setCreatedTaskOption] = useState(false);
   const [createTaskOptionInput, setCreatedTaskOptionInput] = useState("");
+  const [selectedUser, setSelectedUser] = useState("");
+  const [deadlineOption, setDeadlineOption] = useState("");
 
   const users = ["dhannu", "rohit", "rupak", "himanshu"];
 
@@ -42,13 +44,15 @@ export function TodoProvider({ children }) {
         id: Date.now(),
         task: createTaskOptionInput,
         status: "Pending",
-        assignedTo: "",
-        deadline: "",
+        assignedTo: selectedUser || "",
+        deadline: deadlineOption || "",
         subTasks: [],
       },
     ]);
     setCreatedTaskOptionInput("");
     setCreatedTaskOption(false);
+    setSelectedUser("");
+    setDeadlineOption("");
   };
 
   const assignUser = (id, user) => {
@@ -333,6 +337,14 @@ export function TodoProvider({ children }) {
         createTaskOptionInput,
         setCreatedTaskOptionInput,
         addCreatedTask,
+        setOpenDropdown,
+        openDropdown,
+        users,
+        assignUser,
+        selectedUser,
+        setSelectedUser,
+        setDeadlineOption,
+        deadlineOption,
       }}
     >
       {children}
