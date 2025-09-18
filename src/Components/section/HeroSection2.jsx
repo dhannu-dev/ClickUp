@@ -21,6 +21,7 @@ import { MdGroup } from "react-icons/md";
 import Todo from "../Todo";
 import { useContext } from "react";
 import { TodoContext } from "../../context/TodoContext";
+import ConfirmCompletedTask from "../ConfirmCompletedTask";
 
 function HeroSection2() {
   const {
@@ -38,6 +39,7 @@ function HeroSection2() {
     setSelectedUser,
     setDeadlineOption,
     deadlineOption,
+    confirmCompleteTask,
   } = useContext(TodoContext);
 
   return (
@@ -275,15 +277,9 @@ function HeroSection2() {
         </div>
 
         <div className=" h-[500px] text-gray-400">
-          {/* <p className="w-1/2 text-center">
-            You have no existing Spaces to put shared tasks in. Create a Space
-            now to organize your work.
-          </p>
-          <button className="px-3 cursor-pointer py-2 rounded-md bg-purple-700 text-white mt-3">
-            Create new Space
-          </button> */}
           <Todo />
         </div>
+        <div>{confirmCompleteTask && <ConfirmCompletedTask />}</div>
       </div>
     </div>
   );

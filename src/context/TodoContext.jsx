@@ -4,6 +4,7 @@ import { createContext, useState } from "react";
 import { MdOutlinePeople } from "react-icons/md";
 import { CiCalendarDate, CiCircleRemove } from "react-icons/ci";
 import { FaS } from "react-icons/fa6";
+import ConfirmCompletedTask from "../Components/ConfirmCompletedTask";
 
 export const TodoContext = createContext();
 
@@ -17,6 +18,7 @@ export function TodoProvider({ children }) {
   const [createTaskOptionInput, setCreatedTaskOptionInput] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const [deadlineOption, setDeadlineOption] = useState("");
+  const [confirmCompleteTask, setConfrimCompleteTask] = useState(null);
 
   const users = ["dhannu", "rohit", "rupak", "himanshu"];
 
@@ -119,6 +121,44 @@ export function TodoProvider({ children }) {
     );
   };
 
+  const handleCompleteCheckbox = (taskId, task) => {
+    console.log(taskId, task);
+    const hasPending =
+      task.subTasks.length > 0 &&
+      task.subTasks.some((cur) => cur.status !== "Completed");
+    console.log(hasPending);
+
+    if (task.subTasks.length === 0 || !hasPending) {
+      setList((prev) =>
+        prev.map((cur) =>
+          cur.id === taskId ? { ...cur, status: "Completed" } : cur
+        )
+      );
+      setOpenDropdownCheckbox(null);
+    } else {
+      setConfrimCompleteTask(hasPending ? taskId : null);
+      setOpenDropdownCheckbox(null);
+    }
+  };
+
+  const forceCompeleteTask = (taskId) => {
+    setList((prev) =>
+      prev.map((cur) => {
+        return cur.id === taskId
+          ? {
+              ...cur,
+              status: "Completed",
+              subTasks: cur.subTasks.map((s) => ({
+                ...s,
+                status: "Completed",
+              })),
+            }
+          : cur;
+      })
+    );
+    setConfrimCompleteTask(null);
+  };
+
   const progressTasks = list.filter((t) => t.status === "Progress");
   const pendingTasks = list.filter((t) => t.status === "Pending");
   const completedTask = list.filter((t) => t.status === "Completed");
@@ -175,14 +215,7 @@ export function TodoProvider({ children }) {
                   Progress
                 </button>
                 <button
-                  onClick={() => {
-                    setList((prev) =>
-                      prev.map((t) =>
-                        t.id === cur.id ? { ...t, status: "Completed" } : t
-                      )
-                    );
-                    setOpenDropdownCheckbox(null);
-                  }}
+                  onClick={() => handleCompleteCheckbox(cur.id, cur)}
                   className="block px-4 py-2 text-sm text-white hover:bg-zinc-800 w-full"
                 >
                   Completed
@@ -190,6 +223,7 @@ export function TodoProvider({ children }) {
               </div>
             )}
           </div>
+
           <span>{cur.task}</span>
         </div>
 
@@ -345,6 +379,9 @@ export function TodoProvider({ children }) {
         setSelectedUser,
         setDeadlineOption,
         deadlineOption,
+        confirmCompleteTask,
+        setConfrimCompleteTask,
+        forceCompeleteTask,
       }}
     >
       {children}
