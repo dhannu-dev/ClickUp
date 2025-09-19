@@ -26,7 +26,7 @@ export default function Todo() {
   }, [list]);
 
   return (
-    <div className="w-full h-auto px-10 py-5">
+    <div className="w-full h-auto px-5 py-5">
       {progressTasks.length > 0 && (
         <div className="mb-6">
           <div className="w-full flex justify-between px-2">
