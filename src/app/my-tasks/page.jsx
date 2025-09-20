@@ -39,10 +39,11 @@ export default function Page() {
           Manage Cards
         </button>
       </div>
+
       <div className="flex gap-y-5 flex-wrap justify-between p-5">
         <h1 className="w-full text-2xl font-semibold">Good Morning, Dhannu</h1>
 
-        <div className="container flex gap-y-5 flex-wrap justify-between p-2">
+        <div className="container no-scrollbar flex gap-y-5 flex-wrap h-[600px] overflow-y-auto justify-between p-2">
           {tasks.map((task) => (
             <div
               key={task.id}
@@ -51,7 +52,6 @@ export default function Page() {
                 setDraggedId(task.id);
                 e.dataTransfer.effectAllowed = "move";
 
-                // custom drag preview
                 const dragImage = e.currentTarget.cloneNode(true);
                 dragImage.style.position = "absolute";
                 dragImage.style.pointerEvents = "none";
@@ -73,7 +73,17 @@ export default function Page() {
                   { once: true }
                 );
               }}
-              onDragOver={(e) => e.preventDefault()}
+              onDragOver={(e) => {
+                e.preventDefault();
+                const container = document.querySelector(".container");
+                const rect = container.getBoundingClientRect();
+
+                if (e.clientY < rect.top + 50) {
+                  container.scrollBy({ top: -20, behavior: "smooth" });
+                } else if (e.clientY > rect.bottom - 50) {
+                  container.scrollBy({ top: 20, behavior: "smooth" });
+                }
+              }}
               onDrop={() => handleDrop(task.id)}
               className={`cursor-grab active:cursor-grabbing rounded-md flex items-center justify-center w-[550px] h-[400px] transition ${
                 draggedId === task.id ? "bg-zinc-800" : "bg-zinc-900"
