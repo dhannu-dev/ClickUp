@@ -3,6 +3,7 @@
 import { useContext, useEffect, useState } from "react";
 import { CiCircleRemove } from "react-icons/ci";
 import { SpaceContext } from "../../context/SpaceContext";
+import Link from "next/link";
 
 function Space() {
   const {
@@ -49,9 +50,11 @@ function Space() {
               >
                 {cur.spaceList.charAt(0)}
               </span>
-              <h1 className={`text-gray-400 text-[14px] w-full cursor-pointer`}>
-                {cur.spaceList}
-              </h1>
+              <Link href="/" className="w-full">
+                <h1 className="text-[14px] text-gray-400 group-hover:text-white cursor-pointer py-1 rounded-md transition">
+                  {cur.spaceList}
+                </h1>
+              </Link>
               <span
                 onClick={() => handleRemoveSpace(cur.id)}
                 className="text-2xl opacity-0 text-gray-300 group-hover:opacity-100 cursor-pointer"
@@ -61,6 +64,13 @@ function Space() {
             </div>
           );
         })}
+        <div
+          onClick={handleSpace}
+          className="px-2 py-1 cursor-pointer flex items-center justify-start gap-2 text-zinc-500 hover:bg-zinc-800 rounded-md mt-1"
+        >
+          <span className="text-xl">+</span>
+          <span className="text-sm">New Space</span>
+        </div>
       </div>
       {space && (
         <div

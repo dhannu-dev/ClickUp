@@ -168,7 +168,7 @@ export function TodoProvider({ children }) {
   const renderTaskRow = (cur) => (
     <div
       key={cur.id}
-      className="list p-1 px-2 mt-2 text-gray-400 text-sm flex flex-col border-t border-zinc-800 border-b w-full"
+      className="list p-1 px-2 mt-2 text-gray-100 text-sm flex flex-col border-t border-zinc-800 border-b w-full"
     >
       {/* 🔹 Main Task Row */}
       <div className="flex justify-between items-center">
@@ -223,8 +223,7 @@ export function TodoProvider({ children }) {
               </div>
             )}
           </div>
-
-          <span>{cur.task}</span>
+          <span className="text-white">{cur.task}</span>
         </div>
 
         <div className="flex text-center gap-2">
@@ -299,7 +298,7 @@ export function TodoProvider({ children }) {
                 className={
                   sub.status === "Completed"
                     ? "line-through text-gray-500"
-                    : "text-gray-300"
+                    : "text-gray-100"
                 }
               >
                 {sub.task}
@@ -332,7 +331,7 @@ export function TodoProvider({ children }) {
               }))
             }
             placeholder="Add Subtask"
-            className="p-1 text-sm w-full text-gray-300 rounded-md outline-none"
+            className="p-1 text-sm w-full text-gray-100 rounded-md outline-none"
           />
           <button
             type="submit"

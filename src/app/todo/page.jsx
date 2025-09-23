@@ -1,8 +1,6 @@
 "use client";
-
-import React, { useContext, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Todo from "../Components/Todo";
+import React, { useContext } from "react";
+import Todo from "../../Components/Todo";
 import { CiViewList } from "react-icons/ci";
 import { FaFlipboard } from "react-icons/fa6";
 import { FcCalendar } from "react-icons/fc";
@@ -11,14 +9,11 @@ import { TbSubtask } from "react-icons/tb";
 import { BsLayoutThreeColumns } from "react-icons/bs";
 import { MdGroup, MdOutlineFilterList } from "react-icons/md";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import ConfirmCompletedTask from "../Components/ConfirmCompletedTask";
-import { TodoContext } from "../context/TodoContext";
-import HomePage from "../Components/HomePage";
-import { SpaceContext } from "../context/SpaceContext";
+import ConfirmCompletedTask from "../../Components/ConfirmCompletedTask";
+import { TodoContext } from "../../context/TodoContext";
 
-export default function Page() {
+export default function page() {
   const { confirmCompleteTask } = useContext(TodoContext);
-  const { list } = useContext(SpaceContext);
 
   return (
     <div className="w-full h-full bg-transparent border-t border-t-gray-800 rounded-md">
@@ -89,7 +84,7 @@ export default function Page() {
       </div>
 
       <div className="h-[500px] text-gray-400">
-        {list.length > 0 ? <Todo /> : <HomePage />}
+        <Todo />
       </div>
 
       {confirmCompleteTask && <ConfirmCompletedTask />}
