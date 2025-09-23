@@ -15,6 +15,8 @@ import { MdOutlineFilterList, MdOutlinePeople } from "react-icons/md";
 import { useContext, useState } from "react";
 import { TodoContext } from "../../context/TodoContext";
 import Link from "next/link";
+import Space from "../space/Space";
+import { SpaceContext } from "../../context/SpaceContext";
 
 function HeroSection2() {
   const {
@@ -35,7 +37,7 @@ function HeroSection2() {
     confirmCompleteTask,
   } = useContext(TodoContext);
 
-  const [page, setPage] = useState(null);
+
 
   return (
     <div className="w-full h-screen flex px-2 py-1">
@@ -192,10 +194,15 @@ function HeroSection2() {
             <h2>All Tasks</h2>
           </div>
 
-          <div className="flex items-center gap-3 w-full rounded-md hover:bg-zinc-800 p-1">
+          <div className="flex items-center gap-3 w-full hover:bg-zinc-800 p-1">
             <IoIosMore />
             <h2>More</h2>
           </div>
+          <hr className="mt-3" />
+        </div>
+
+        <div>
+          <Space />
         </div>
       </div>
     </div>

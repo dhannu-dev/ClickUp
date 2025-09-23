@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@tippyjs/react": "^4.2.6",
     "clsx": "^2.1.1",
     "dom-autoscroller": "^2.3.4",
     "next": "15.5.2",
@@ -16,7 +17,8 @@
     "react-dom": "19.1.0",
     "react-draggable": "^4.5.0",
     "react-icons": "^5.5.0",
-    "react-rnd": "^10.5.2"
+    "react-rnd": "^10.5.2",
+    "tippy.js": "^6.3.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

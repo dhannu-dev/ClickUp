@@ -40,8 +40,6 @@ function Navbar() {
           Dk
         </span>
       </div>
-
-      
     </div>
   );
 }
