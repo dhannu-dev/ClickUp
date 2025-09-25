@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { CiCircleRemove } from "react-icons/ci";
 import { SpaceContext } from "../../context/SpaceContext";
 import Link from "next/link";
+import { TodoContext } from "../../context/TodoContext";
 
 function Space() {
   const {
@@ -17,6 +18,8 @@ function Space() {
     setDescription,
     handleRemoveSpace,
   } = useContext(SpaceContext);
+
+  const { handleSpaceClick } = useContext(TodoContext);
 
   return (
     <div className="h-full w-full py-4">
@@ -51,7 +54,10 @@ function Space() {
                 {cur.spaceList.charAt(0)}
               </span>
               <Link href={`/todos/${cur.id}`} className="w-full">
-                <h1 className="text-[14px] text-gray-400 group-hover:text-white cursor-pointer py-1 rounded-md transition">
+                <h1
+                  onClick={() => handleSpaceClick(cur.id)}
+                  className="text-[14px] text-gray-400 group-hover:text-white cursor-pointer py-1 rounded-md transition"
+                >
                   {cur.spaceList}
                 </h1>
               </Link>

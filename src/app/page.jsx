@@ -18,7 +18,6 @@ import { SpaceContext } from "../context/SpaceContext";
 
 export default function Page() {
   const { confirmCompleteTask } = useContext(TodoContext);
-  const { list } = useContext(SpaceContext);
 
   return (
     <div className="w-full h-full bg-transparent border-t border-t-gray-800 rounded-md">
@@ -33,7 +32,6 @@ export default function Page() {
           </button>
         </div>
       </div>
-
       <div className="flex items-center gap-4 border-b border-gray-800 px-4 py-2 text-sm text-gray-300">
         <div className="flex items-center gap-1 cursor-pointer hover:text-white">
           <CiViewList />
@@ -52,7 +50,6 @@ export default function Page() {
           <span>View</span>
         </div>
       </div>
-
       <div className="flex justify-between items-center px-4 py-2 text-xs text-gray-400">
         <div className="flex gap-3">
           <div className="flex items-center gap-1 px-2 py-1 border border-gray-600 rounded-full">
@@ -87,12 +84,10 @@ export default function Page() {
           </div>
         </div>
       </div>
-
       <div className="h-[500px] text-gray-400">
-        {list.length > 0 ? <Todo /> : <HomePage />}
+        <HomePage />
       </div>
-
-      {confirmCompleteTask && <ConfirmCompletedTask />}
+      {confirmCompleteTask && <ConfirmCompletedTask />}s
     </div>
   );
 }

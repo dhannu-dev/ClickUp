@@ -19,6 +19,7 @@ export function TodoProvider({ children }) {
   const [selectedUser, setSelectedUser] = useState("");
   const [deadlineOption, setDeadlineOption] = useState("");
   const [confirmCompleteTask, setConfrimCompleteTask] = useState(null);
+  const [selectedSpaceId, setSelectedSpaceId] = useState(null);
 
   const users = ["dhannu", "rohit", "rupak", "himanshu"];
 
@@ -41,18 +42,48 @@ export function TodoProvider({ children }) {
   const addTask = (spaceId) => {
     if (!input.trim()) return;
 
-    const data = JSON.parse(localStorage.getItem("spaceItems"));
-
-    data.forEach((cur) => {
+    // localStorage se pura data nikal lo
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    const updatedData = data.map((cur) => {
       if (Number(cur.id) === Number(spaceId)) {
-        const updatedTask = {task: input };
-        cur.todo.push(updatedTask);
-        console.log(cur);
-        setInput("");
-      } else {
-        console.log("not match");
+        const newTask = {
+          id: Date.now(),
+          task: input,
+          status: "Pending",
+          assignedTo: "",
+          deadline: "",
+          subTasks: [],
+        };
+
+        return {
+          ...cur,
+          todo: [...cur.todo, newTask],
+        };
       }
+      return cur;
     });
+
+    // updated data ko localStorage me wapas save karo
+    localStorage.setItem("spaceItems", JSON.stringify(updatedData));
+    console.log("Updated spaceItems:", updatedData);
+
+    const selectedSpace = updatedData.find(
+      (cur) => Number(cur.id) === Number(spaceId)
+    );
+    setList(selectedSpace?.todo || []);
+    setInput("");
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem("spaceItems");
+    if (saved) setList(JSON.parse(saved));
+  }, []);
+
+  const handleSpaceClick = (id) => {
+    setSelectedSpaceId(id);
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    const selectedSpace = data.find((space) => Number(space.id) === Number(id));
+    setList(selectedSpace?.todo || []);
   };
 
   const addCreatedTask = () => {
@@ -182,7 +213,11 @@ export function TodoProvider({ children }) {
 
   const today = new Date().toISOString().split("T")[0];
 
-  const renderTaskRow = (cur) => (
+  useEffect(() => {
+    console.log(list);
+  }, [list]);
+
+  const renderTaskRow = (cur, spaceId) => (
     <div
       key={cur.id}
       className="list p-1 px-2 mt-2 text-gray-100 text-sm flex flex-col border-t border-zinc-800 border-b w-full"
@@ -398,6 +433,8 @@ export function TodoProvider({ children }) {
         confirmCompleteTask,
         setConfrimCompleteTask,
         forceCompeleteTask,
+        handleSpaceClick,
+        selectedSpaceId,
       }}
     >
       {children}

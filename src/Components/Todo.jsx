@@ -14,6 +14,7 @@ export default function Todo({ spaceId }) {
     input,
     setInput,
     setList,
+    selectedSpaceId,
   } = useContext(TodoContext);
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export default function Todo({ spaceId }) {
               <div className="p-2 w-[120px]">Remove</div>
             </div>
           </div>
-          {progressTasks.map(renderTaskRow)}
+          {progressTasks.map((task) => renderTaskRow(task, spaceId))}
         </div>
       )}
 
@@ -51,7 +52,7 @@ export default function Todo({ spaceId }) {
               <div className="p-2 w-[120px]">Remove</div>
             </div>
           </div>
-          {completedTask.map(renderTaskRow)}
+          {completedTask.map((task) => renderTaskRow(task, spaceId))}
         </div>
       )}
 
@@ -64,7 +65,7 @@ export default function Todo({ spaceId }) {
         </div>
       </div>
       <div className="List text-zinc-800">
-        {pendingTasks.map(renderTaskRow)}
+        {pendingTasks.map((task) => renderTaskRow(task, spaceId))}
       </div>
 
       {/* Add new Task */}
@@ -80,7 +81,7 @@ export default function Todo({ spaceId }) {
         </div>
         <div>
           <button
-            onClick={() => addTask(spaceId)}
+            onClick={() => addTask(selectedSpaceId)}
             className="bg-purple-600 p-2 text-xs rounded-md hover:bg-purple-700 text-white"
           >
             Add Task
