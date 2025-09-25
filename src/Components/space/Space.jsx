@@ -50,7 +50,7 @@ function Space() {
               >
                 {cur.spaceList.charAt(0)}
               </span>
-              <Link href="/" className="w-full">
+              <Link href={`/todos/${cur.id}`} className="w-full">
                 <h1 className="text-[14px] text-gray-400 group-hover:text-white cursor-pointer py-1 rounded-md transition">
                   {cur.spaceList}
                 </h1>

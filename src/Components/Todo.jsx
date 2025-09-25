@@ -3,7 +3,7 @@
 import { useContext, useEffect, useState } from "react";
 import { TodoContext } from "../context/TodoContext";
 
-export default function Todo() {
+export default function Todo({ spaceId }) {
   const {
     renderTaskRow,
     addTask,
@@ -80,7 +80,7 @@ export default function Todo() {
         </div>
         <div>
           <button
-            onClick={addTask}
+            onClick={() => addTask(spaceId)}
             className="bg-purple-600 p-2 text-xs rounded-md hover:bg-purple-700 text-white"
           >
             Add Task

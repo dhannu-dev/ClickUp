@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Todo from "../../../Components/Todo";
 import { CiViewList } from "react-icons/ci";
 import { FaFlipboard } from "react-icons/fa6";
@@ -15,28 +15,17 @@ import { SpaceContext } from "../../../context/SpaceContext";
 import HomePage from "../../../Components/HomePage";
 
 export default function page({ params }) {
-  const resolvedParams = React.use(params);
-  const todoId = Number(resolvedParams.todo);
-
   const { confirmCompleteTask } = useContext(TodoContext);
   const { list } = useContext(SpaceContext);
 
-  const [currentSpace, setCurrentSpace] = useState(null);
+  const resolvedParams = React.use(params);
 
-  useEffect(() => {
-    if (list.length > 0) {
-      var savedItems = JSON.parse(localStorage.getItem("spaceItems")) || [];
-      const found = savedItems.filter((cur) => cur.id === todoId);
-      setCurrentSpace(found || null);
-    }
-  }, [list, todoId]);
-
-  console.log(currentSpace);
+  const spaceId = resolvedParams.todo;
 
   return (
     <div className="w-full h-full bg-transparent border-t border-t-gray-800 rounded-md">
       <div className="flex justify-between items-center px-4 py-2 mt-2">
-        <h1 className="font-semibold text-lg">Dhannu Kumar's Workspace 2</h1>
+        <h1 className="font-semibold text-lg">Dhannu Kumar's Workspace</h1>
         <div className="flex gap-3">
           <button className="px-3 py-1 border border-gray-500 rounded-md text-sm hover:bg-gray-700">
             Ask AI
@@ -102,7 +91,7 @@ export default function page({ params }) {
       </div>
 
       <div className="h-[500px] text-gray-400">
-        {list.length > 0 ? <Todo spaceId={todoId} /> : <HomePage />}
+        {list.length > 0 ? <Todo spaceId={spaceId} /> : <HomePage />}
       </div>
 
       {confirmCompleteTask && <ConfirmCompletedTask />}

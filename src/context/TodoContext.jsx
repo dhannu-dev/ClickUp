@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { MdOutlinePeople } from "react-icons/md";
 import { CiCalendarDate, CiCircleRemove } from "react-icons/ci";
 import { FaS } from "react-icons/fa6";
@@ -22,20 +22,37 @@ export function TodoProvider({ children }) {
 
   const users = ["dhannu", "rohit", "rupak", "himanshu"];
 
-  const addTask = () => {
+  // const addTask = () => {
+  //   if (!input.trim()) return;
+  //   setList((prev) => [
+  //     ...prev,
+  //     {
+  //       id: Date.now(),
+  //       task: input,
+  //       status: "Pending",
+  //       assignedTo: "",
+  //       deadline: "",
+  //       subTasks: [],
+  //     },
+  //   ]);
+  //   setInput("");
+  // };
+
+  const addTask = (spaceId) => {
     if (!input.trim()) return;
-    setList((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        task: input,
-        status: "Pending",
-        assignedTo: "",
-        deadline: "",
-        subTasks: [],
-      },
-    ]);
-    setInput("");
+
+    const data = JSON.parse(localStorage.getItem("spaceItems"));
+
+    data.forEach((cur) => {
+      if (Number(cur.id) === Number(spaceId)) {
+        const updatedTask = {task: input };
+        cur.todo.push(updatedTask);
+        console.log(cur);
+        setInput("");
+      } else {
+        console.log("not match");
+      }
+    });
   };
 
   const addCreatedTask = () => {
