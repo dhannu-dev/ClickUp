@@ -5,6 +5,10 @@ import { MdOutlinePeople } from "react-icons/md";
 import { CiCalendarDate, CiCircleRemove } from "react-icons/ci";
 import { FaS } from "react-icons/fa6";
 import ConfirmCompletedTask from "../Components/ConfirmCompletedTask";
+import { TfiLayoutMenuSeparated } from "react-icons/tfi";
+import { AiTwotoneEdit } from "react-icons/ai";
+import { MdDeleteOutline } from "react-icons/md";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export const TodoContext = createContext();
 
@@ -20,6 +24,9 @@ export function TodoProvider({ children }) {
   const [deadlineOption, setDeadlineOption] = useState("");
   const [confirmCompleteTask, setConfrimCompleteTask] = useState(null);
   const [selectedSpaceId, setSelectedSpaceId] = useState(null);
+  const [openTodoMenu, setOpenTodoMenu] = useState(null);
+  const [edittodoId, setEditTodoId] = useState(null);
+  const [editingTodoText, setEditingTodoText] = useState("");
 
   const users = ["dhannu", "rohit", "rupak", "himanshu"];
 
@@ -119,7 +126,22 @@ export function TodoProvider({ children }) {
   };
 
   const handleDelete = (id) => {
+    // 1️⃣ Update the state
     setList((prev) => prev.filter((cur) => cur.id !== id));
+
+    // 2️⃣ Update localStorage for the current selected space
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    const updatedData = data.map((space) => {
+      if (Number(space.id) === Number(selectedSpaceId)) {
+        return {
+          ...space,
+          todo: space.todo.filter((t) => t.id !== id),
+        };
+      }
+      return space;
+    });
+
+    localStorage.setItem("spaceItems", JSON.stringify(updatedData));
   };
 
   const addSubTask = (taskId, subTaskText) => {
@@ -213,11 +235,37 @@ export function TodoProvider({ children }) {
 
   const today = new Date().toISOString().split("T")[0];
 
-  useEffect(() => {
-    console.log(list);
-  }, [list]);
+  const handleEditTodo = (id) => {
+    console.log(id);
+    const todo = list.find((t) => t.id === id);
+    if (todo) {
+      setEditTodoId(id);
+      setEditingTodoText(todo.task);
+      setOpenTodoMenu(null);
+    }
+  };
 
-  const renderTaskRow = (cur, spaceId) => (
+  const saveTodo = (id) => {
+    const updatedList = list.map((t) =>
+      t.id === id ? { ...t, task: editingTodoText } : t
+    );
+    setList(updatedList);
+
+    // Update localStorage too if you are using spaceItems
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    const updatedData = data.map((space) => ({
+      ...space,
+      todo: space.todo.map((t) =>
+        t.id === id ? { ...t, task: editingTodoText } : t
+      ),
+    }));
+    localStorage.setItem("spaceItems", JSON.stringify(updatedData));
+
+    setEditTodoId(null);
+    setEditingTodoText("");
+  };
+
+  const renderTaskRow = (cur) => (
     <div
       key={cur.id}
       className="list p-1 px-2 mt-2 text-gray-100 text-sm flex flex-col border-t border-zinc-800 border-b w-full"
@@ -275,8 +323,25 @@ export function TodoProvider({ children }) {
               </div>
             )}
           </div>
-          <span className="text-white">{cur.task}</span>
+          {edittodoId === cur.id ? (
+            <input
+              type="text"
+              value={editingTodoText}
+              onChange={(e) => setEditingTodoText(e.target.value)}
+              className="w-full text-white px-2 py-2 outline-none bg-transparent "
+            />
+          ) : (
+            <span className="text-white">{cur.task}</span>
+          )}
         </div>
+        {edittodoId === cur.id && (
+          <button
+            onClick={() => saveTodo(cur.id)}
+            className="ml-2 px-2 py-1 bg-green-600 text-white rounded-md text-sm"
+          >
+            Save
+          </button>
+        )}
 
         <div className="flex text-center gap-2">
           <div className="relative">
@@ -284,7 +349,7 @@ export function TodoProvider({ children }) {
               onClick={() =>
                 setOpenDropdown(openDropdown === cur.id ? null : cur.id)
               }
-              className="p-2 text-sm  w-[120px] text-start rounded-md hover:bg-zinc-800 text-white "
+              className="p-2 relative text-sm  w-[120px] text-start rounded-md hover:bg-zinc-800 text-white "
             >
               {cur.assignedTo ? (
                 <div className="w-5 h-5 flex items-center justify-center rounded-full bg-purple-600 text-white text-xs">
@@ -320,12 +385,39 @@ export function TodoProvider({ children }) {
             />
           </label>
 
-          <button
-            onClick={() => handleDelete(cur.id)}
-            className="p-2 w-[120px] text-xs rounded-md hover:bg-zinc-800 text-white"
-          >
-            <CiCircleRemove size={20} />
-          </button>
+          <div className="w-full h-full relative">
+            <button
+              onClick={() =>
+                setOpenTodoMenu(cur.id === openTodoMenu ? null : cur.id)
+              }
+              className="p-2 relative w-[120px] text-xs rounded-md hover:bg-zinc-800 text-white"
+            >
+              <TfiLayoutMenuSeparated size={20} />
+            </button>
+
+            {cur.id === openTodoMenu && (
+              <div className="absolute left-6 top-10 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg z-50 w-[100px]">
+                <button
+                  onClick={() => handleEditTodo(cur.id)}
+                  className="block px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 rounded-md w-full"
+                >
+                  <span className="flex items-center gap-2">
+                    <MdOutlineModeEdit size={15} />
+                    <p className="text-[14px]">Edit</p>
+                  </span>
+                </button>
+                <button
+                  onClick={() => handleDelete(cur.id)}
+                  className="block px-4 py-2 text-sm text-red-200 rounded-md hover:bg-zinc-800 w-full"
+                >
+                  <span className="flex items-center gap-2">
+                    <MdDeleteOutline size={15} />
+                    <p className="text-[14px]">Delete</p>
+                  </span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
