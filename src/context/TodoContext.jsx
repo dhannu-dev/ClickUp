@@ -5,10 +5,12 @@ import { MdOutlinePeople } from "react-icons/md";
 import { CiCalendarDate, CiCircleRemove } from "react-icons/ci";
 import { FaS } from "react-icons/fa6";
 import ConfirmCompletedTask from "../Components/ConfirmCompletedTask";
-import { TfiLayoutMenuSeparated } from "react-icons/tfi";
+import { BsThreeDots } from "react-icons/bs";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { MdDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { MdDownloadDone } from "react-icons/md";
 
 export const TodoContext = createContext();
 
@@ -126,10 +128,8 @@ export function TodoProvider({ children }) {
   };
 
   const handleDelete = (id) => {
-    // 1️⃣ Update the state
     setList((prev) => prev.filter((cur) => cur.id !== id));
 
-    // 2️⃣ Update localStorage for the current selected space
     const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
     const updatedData = data.map((space) => {
       if (Number(space.id) === Number(selectedSpaceId)) {
@@ -241,7 +241,6 @@ export function TodoProvider({ children }) {
     if (todo) {
       setEditTodoId(id);
       setEditingTodoText(todo.task);
-      setOpenTodoMenu(null);
     }
   };
 
@@ -263,6 +262,7 @@ export function TodoProvider({ children }) {
 
     setEditTodoId(null);
     setEditingTodoText("");
+    setOpenTodoMenu(null);
   };
 
   const renderTaskRow = (cur) => (
@@ -328,20 +328,12 @@ export function TodoProvider({ children }) {
               type="text"
               value={editingTodoText}
               onChange={(e) => setEditingTodoText(e.target.value)}
-              className="w-full text-white px-2 py-2 outline-none bg-transparent "
+              className="w-full text-white px-2 py-2 outline-none bg-zinc-800 rounded-md "
             />
           ) : (
             <span className="text-white">{cur.task}</span>
           )}
         </div>
-        {edittodoId === cur.id && (
-          <button
-            onClick={() => saveTodo(cur.id)}
-            className="ml-2 px-2 py-1 bg-green-600 text-white rounded-md text-sm"
-          >
-            Save
-          </button>
-        )}
 
         <div className="flex text-center gap-2">
           <div className="relative">
@@ -390,9 +382,9 @@ export function TodoProvider({ children }) {
               onClick={() =>
                 setOpenTodoMenu(cur.id === openTodoMenu ? null : cur.id)
               }
-              className="p-2 relative w-[120px] text-xs rounded-md hover:bg-zinc-800 text-white"
+              className="p-2 ml-2 relative w-[120px] text-xs rounded-md hover:bg-zinc-800 text-white"
             >
-              <TfiLayoutMenuSeparated size={20} />
+              <BsThreeDots size={20} />
             </button>
 
             {cur.id === openTodoMenu && (
@@ -406,6 +398,17 @@ export function TodoProvider({ children }) {
                     <p className="text-[14px]">Edit</p>
                   </span>
                 </button>
+                {edittodoId === cur.id && (
+                  <button
+                    onClick={() => saveTodo(cur.id)}
+                    className="block px-4 py-2 text-sm text-green-200 hover:bg-zinc-800 rounded-md w-full"
+                  >
+                    <span className="flex items-center gap-2">
+                      <MdDownloadDone size={16} />
+                      <p className="text-[14px]">Save</p>
+                    </span>
+                  </button>
+                )}
                 <button
                   onClick={() => handleDelete(cur.id)}
                   className="block px-4 py-2 text-sm text-red-200 rounded-md hover:bg-zinc-800 w-full"

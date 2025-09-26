@@ -35,7 +35,7 @@ export default function Todo({ spaceId }) {
             <div className="flex text-sm gap-3">
               <div className="p-2 w-[120px]">Assignee</div>
               <div className="p-2 w-[120px]">Due date</div>
-              <div className="p-2 w-[120px]">Remove</div>
+              <div className="p-2 w-[120px]">Menu</div>
             </div>
           </div>
           {progressTasks.map((task) => renderTaskRow(task, spaceId))}
@@ -49,7 +49,7 @@ export default function Todo({ spaceId }) {
             <div className="flex text-sm gap-3">
               <div className="p-2 w-[120px]">Assignee</div>
               <div className="p-2 w-[120px]">Due date</div>
-              <div className="p-2 w-[120px]">Remove</div>
+              <div className="p-2 w-[120px]">Menu</div>
             </div>
           </div>
           {completedTask.map((task) => renderTaskRow(task, spaceId))}
@@ -61,7 +61,7 @@ export default function Todo({ spaceId }) {
         <div className="flex text-sm gap-3">
           <div className="p-2 w-[120px]">Assignee</div>
           <div className="p-2 w-[120px]">Due date</div>
-          <div className="p-2 w-[120px]">Remove</div>
+          <div className="p-2 w-[120px]">Menu</div>
         </div>
       </div>
       <div className="List text-zinc-800">
