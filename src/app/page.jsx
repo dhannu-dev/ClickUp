@@ -15,9 +15,11 @@ import ConfirmCompletedTask from "../Components/ConfirmCompletedTask";
 import { TodoContext } from "../context/TodoContext";
 import HomePage from "../Components/HomePage";
 import { SpaceContext } from "../context/SpaceContext";
+import Link from "next/link";
 
 export default function Page() {
   const { confirmCompleteTask } = useContext(TodoContext);
+  const { list, handleSpaceClick } = useContext(SpaceContext);
 
   return (
     <div className="w-full h-full bg-transparent border-t border-t-gray-800 rounded-md">
@@ -32,19 +34,76 @@ export default function Page() {
           </button>
         </div>
       </div>
-      <div className="flex items-center gap-4 border-b border-gray-800 px-4 py-2 text-sm text-gray-300">
-        <div className="flex items-center gap-1 cursor-pointer hover:text-white">
+      <div className="flex relative items-center gap-6 border-b border-gray-800 px-4 py-2 text-sm text-gray-300">
+        {/* List + Dropdown */}
+        <div className="relative group flex items-center gap-1 cursor-pointer hover:text-white">
           <CiViewList />
           <span>List</span>
+          <ul className="absolute left-0 top-full hidden group-hover:block bg-zinc-900 text-zinc-300 shadow-lg rounded-md z-50 min-w-[200px]">
+            {list.length > 0 ? (
+              list.map((cur) => {
+                return (
+                  <div
+                    key={cur.id}
+                    className="flex items-center gap-2 mt-1 group py-1 px-1 rounded-md hover:bg-zinc-800 transition"
+                  >
+                    <span
+                      className={`w-[25px] font-semibold h-[24px] flex justify-center items-center text-sm rounded-md ${cur.color}`}
+                    >
+                      {cur.spaceList.charAt(0)}
+                    </span>
+                    <Link href={`/todos/${cur.id}`} className="w-full">
+                      <h1
+                        onClick={() => handleSpaceClick(cur.id)}
+                        className="text-[14px] text-gray-400 group-hover:text-white cursor-pointer py-1 rounded-md transition"
+                      >
+                        {cur.spaceList}
+                      </h1>
+                    </Link>
+                  </div>
+                );
+              })
+            ) : (
+              <li className="py-2 px-3">Space List is empty.</li>
+            )}
+          </ul>
         </div>
-        <div className="flex items-center gap-1 cursor-pointer hover:text-white">
+
+        {/* Board + Dropdown */}
+        <div className="relative group flex items-center gap-1 cursor-pointer hover:text-white">
           <FaFlipboard />
           <span>Board</span>
+          <ul className="absolute left-0 top-full hidden group-hover:block bg-zinc-900 text-zinc-300 shadow-lg rounded-md z-50 min-w-[150px]">
+            <li className="px-4 py-2 hover:bg-zinc-600 cursor-pointer rounded-md">
+              Kanban View
+            </li>
+            <li className="px-4 py-2 hover:bg-zinc-600 cursor-pointer rounded-md">
+              Scrum Board
+            </li>
+            <li className="px-4 py-2 hover:bg-zinc-600 cursor-pointer rounded-md">
+              Timeline
+            </li>
+          </ul>
         </div>
-        <div className="flex items-center gap-1 cursor-pointer hover:text-white">
+
+        {/* Calendar + Dropdown */}
+        <div className="relative group flex items-center gap-1 cursor-pointer hover:text-white">
           <FcCalendar />
           <span>Calendar</span>
+          <ul className="absolute left-0 top-full hidden group-hover:block bg-zinc-800 text-zinc-300 shadow-lg rounded-md z-50 min-w-[150px]">
+            <li className="px-4 py-2 hover:bg-zinc-600 rounded-md cursor-pointer">
+              Month View
+            </li>
+            <li className="px-4 py-2 hover:bg-zinc-600 rounded-md cursor-pointer">
+              Week View
+            </li>
+            <li className="px-4 py-2 hover:bg-zinc-600 rounded-md cursor-pointer">
+              Day View
+            </li>
+          </ul>
         </div>
+
+        {/* View (No dropdown, just button) */}
         <div className="flex items-center gap-1 border-l border-gray-700 pl-3 cursor-pointer hover:text-white">
           <span>+</span>
           <span>View</span>
@@ -87,7 +146,7 @@ export default function Page() {
       <div className="h-[500px] text-gray-400">
         <HomePage />
       </div>
-      {confirmCompleteTask && <ConfirmCompletedTask />}s
+      {confirmCompleteTask && <ConfirmCompletedTask />}
     </div>
   );
 }
