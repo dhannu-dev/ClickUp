@@ -30,6 +30,23 @@ export function TodoProvider({ children }) {
   const [edittodoId, setEditTodoId] = useState(null);
   const [editingTodoText, setEditingTodoText] = useState("");
   const [allTask, setAllTasks] = useState(false);
+  const [subTaskOpen, setSubTaskOpen] = useState(null);
+
+  useEffect(() => {
+    const savedId = localStorage.getItem("savedSubtaskId");
+    if (savedId) {
+      setSubTaskOpen(JSON.parse(savedId));
+    }
+  }, []);
+
+  // Save subTaskOpen to localStorage
+  useEffect(() => {
+    if (subTaskOpen !== null) {
+      localStorage.setItem("savedSubtaskId", JSON.stringify(subTaskOpen));
+    } else {
+      localStorage.removeItem("savedSubtaskId");
+    }
+  }, [subTaskOpen]);
 
   const showAllTasks = () => {
     setAllTasks(true);
@@ -85,6 +102,7 @@ export function TodoProvider({ children }) {
       (cur) => Number(cur.id) === Number(spaceId)
     );
     setList(selectedSpace?.todo || []);
+    setInput("");
   };
 
   useEffect(() => {
@@ -358,7 +376,7 @@ export function TodoProvider({ children }) {
     >
       {/* 🔹 Main Task Row */}
       <div className="flex justify-between items-center">
-        <div className="w-1/2 flex gap-2 items-center">
+        <div className="relative group w-1/2 flex gap-2 items-center">
           <div className="relative flex items-center gap-2">
             <input
               type="checkbox"
@@ -369,10 +387,20 @@ export function TodoProvider({ children }) {
                 )
               }
               className={`w-4 h-4 rounded-full appearance-none border cursor-pointer
-      ${cur.status === "Progress" ? "bg-purple-600 border-purple-600" : ""}
-      ${cur.status === "Completed" ? "bg-green-600 border-green-600" : ""}
-      ${cur.status === "Pending" ? "bg-transparent border-gray-400" : ""}
-    `}
+              ${
+                cur.status === "Progress"
+                  ? "bg-purple-600 border-purple-600"
+                  : ""
+              }
+              ${
+                cur.status === "Completed"
+                  ? "bg-green-600 border-green-600"
+                  : ""
+              }
+              ${
+                cur.status === "Pending" ? "bg-transparent border-gray-400" : ""
+              }
+               `}
             />
 
             {cur.id === openDropdownCheckbox && (
@@ -409,6 +437,13 @@ export function TodoProvider({ children }) {
           ) : (
             <span className="text-white">{cur.task}</span>
           )}
+
+          <button
+            onClick={() => setSubTaskOpen(cur.id)}
+            className="absolute top-1/2 -translate-y-1/2 right-2 bg-zinc-700 cursor-pointer text-white px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          >
+            +
+          </button>
         </div>
 
         <div className="flex text-center gap-2">
@@ -500,70 +535,70 @@ export function TodoProvider({ children }) {
         </div>
       </div>
 
-      <div className="ml-6 mt-2">
-        <h4 className="text-sm font-semibold text-gray-300">Subtasks</h4>
-
-        {cur.subTasks.map((sub) => (
-          <div
-            key={sub.id}
-            className="flex items-center justify-between gap-2 mt-1"
-          >
-            <div className="flex items-center gap-1">
-              <input
-                type="checkbox"
-                checked={sub.status === "Completed"}
-                onChange={() => toggleSubTaskStatus(cur.id, sub.id)}
-                className={`appearance-none w-4 h-4 rounded-full border ${
-                  sub.status === "Completed" ? "bg-green-600" : ""
-                }`}
-              />
-              <span
-                className={
-                  sub.status === "Completed"
-                    ? "line-through text-gray-500"
-                    : "text-gray-100"
-                }
-              >
-                {sub.task}
-              </span>
-            </div>
-            <button
-              onClick={() => deleteSubTask(cur.id, sub.id)}
-              className=" text-xs"
+      {subTaskOpen === cur.id && (
+        <div className="ml-6 mt-2">
+          {cur.subTasks.map((sub) => (
+            <div
+              key={sub.id}
+              className="flex items-center justify-between gap-2 mt-1"
             >
-              <CiCircleRemove size={20} />
-            </button>
-          </div>
-        ))}
+              <div className="flex items-center gap-1">
+                <input
+                  type="checkbox"
+                  checked={sub.status === "Completed"}
+                  onChange={() => toggleSubTaskStatus(cur.id, sub.id)}
+                  className={`appearance-none w-4 h-4 rounded-full border ${
+                    sub.status === "Completed" ? "bg-green-600" : ""
+                  }`}
+                />
+                <span
+                  className={
+                    sub.status === "Completed"
+                      ? "line-through text-gray-500"
+                      : "text-gray-100"
+                  }
+                >
+                  {sub.task}
+                </span>
+              </div>
+              <button
+                onClick={() => deleteSubTask(cur.id, sub.id)}
+                className=" text-xs"
+              >
+                <CiCircleRemove size={20} />
+              </button>
+            </div>
+          ))}
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            addSubTask(cur.id, subTaskInputs[cur.id] || "");
-            setSubTaskInputs((prev) => ({ ...prev, [cur.id]: "" }));
-          }}
-          className="flex gap-2 mt-2"
-        >
-          <input
-            type="text"
-            value={subTaskInputs[cur.id] || ""}
-            onChange={(e) =>
-              setSubTaskInputs((prev) => ({
-                ...prev,
-                [cur.id]: e.target.value,
-              }))
-            }
-            placeholder="Add Subtask"
-            className="p-1 text-sm w-full text-gray-100 rounded-md outline-none"
-          />
-          <button
-            type="submit"
-            className="border px-2 py-1 bg-purple-600 text-white rounded-md border-gray-500"
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              addSubTask(cur.id, subTaskInputs[cur.id] || "");
+              setSubTaskInputs((prev) => ({ ...prev, [cur.id]: "" }));
+            }}
+            className="flex gap-2 mt-2"
           >
-            Add
-          </button>
-        </form>
-      </div>
+            <input
+              type="text"
+              value={subTaskInputs[cur.id] || ""}
+              onChange={(e) =>
+                setSubTaskInputs((prev) => ({
+                  ...prev,
+                  [cur.id]: e.target.value,
+                }))
+              }
+              placeholder="Add Subtask"
+              className="p-1 text-sm w-full text-gray-100 rounded-md outline-none"
+            />
+            <button
+              type="submit"
+              className="border px-2 py-1 bg-purple-600 text-white rounded-md border-gray-500"
+            >
+              Add
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 
