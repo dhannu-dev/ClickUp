@@ -19,7 +19,7 @@ function Space() {
     handleRemoveSpace,
   } = useContext(SpaceContext);
 
-  const { handleSpaceClick } = useContext(TodoContext);
+  const { handleSpaceClick, showAllTasks } = useContext(TodoContext);
 
   return (
     <div className="h-full w-full py-4">
@@ -36,7 +36,10 @@ function Space() {
         </button>
       </div>
       <div className="w-full h-auto ">
-        <div className="flex gap-2 mt-2">
+        <div
+          onClick={showAllTasks}
+          className="flex gap-2 mt-2 hover:bg-zinc-800 p-1 rounded-md cursor-pointer"
+        >
           <span className="h-[28px] w-[30px] text-sm flex items-center justify-center bg-black rounded-md">
             A
           </span>
@@ -46,7 +49,7 @@ function Space() {
           return (
             <div
               key={cur.id}
-              className="flex items-center gap-2 mt-2 group py-1 px-1 rounded-md hover:bg-zinc-800 transition"
+              className="flex items-center gap-2 mt-1 group py-1 px-1 rounded-md hover:bg-zinc-800 transition"
             >
               <span
                 className={`w-[35px] font-semibold h-[28px] flex justify-center items-center text-sm rounded-md ${cur.color}`}

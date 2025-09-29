@@ -13,9 +13,10 @@ import ConfirmCompletedTask from "../../../Components/ConfirmCompletedTask";
 import { TodoContext } from "../../../context/TodoContext";
 import { SpaceContext } from "../../../context/SpaceContext";
 import HomePage from "../../../Components/HomePage";
+import AllTask from "../../../Components/AllTask";
 
 export default function page({ params }) {
-  const { confirmCompleteTask } = useContext(TodoContext);
+  const { confirmCompleteTask, allTask } = useContext(TodoContext);
   const { list } = useContext(SpaceContext);
 
   const resolvedParams = React.use(params);
@@ -90,8 +91,14 @@ export default function page({ params }) {
         </div>
       </div>
 
-      <div className="h-[500px] text-gray-400">
-        {list.length > 0 ? <Todo spaceId={spaceId} /> : <HomePage />}
+      <div>
+        {allTask ? (
+          <AllTask />
+        ) : (
+          <div className="h-[500px] text-gray-400">
+            {list.length > 0 ? <Todo spaceId={spaceId} /> : <HomePage />}
+          </div>
+        )}
       </div>
 
       {confirmCompleteTask && <ConfirmCompletedTask />}

@@ -37,8 +37,6 @@ function HeroSection2() {
     confirmCompleteTask,
   } = useContext(TodoContext);
 
-
-
   return (
     <div className="w-full h-screen flex px-2 py-1">
       <div className="h-full rounded-md p-2 space-y-5  w-[50px] bg-[#1e1e2f]">

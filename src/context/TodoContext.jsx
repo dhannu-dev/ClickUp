@@ -29,6 +29,11 @@ export function TodoProvider({ children }) {
   const [openTodoMenu, setOpenTodoMenu] = useState(null);
   const [edittodoId, setEditTodoId] = useState(null);
   const [editingTodoText, setEditingTodoText] = useState("");
+  const [allTask, setAllTasks] = useState(false);
+
+  const showAllTasks = () => {
+    setAllTasks(true);
+  };
 
   const users = ["dhannu", "rohit", "rupak", "himanshu"];
 
@@ -80,7 +85,6 @@ export function TodoProvider({ children }) {
       (cur) => Number(cur.id) === Number(spaceId)
     );
     setList(selectedSpace?.todo || []);
-    setInput("");
   };
 
   useEffect(() => {
@@ -93,6 +97,7 @@ export function TodoProvider({ children }) {
     const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
     const selectedSpace = data.find((space) => Number(space.id) === Number(id));
     setList(selectedSpace?.todo || []);
+    setAllTasks(false);
   };
 
   const addCreatedTask = () => {
@@ -114,17 +119,49 @@ export function TodoProvider({ children }) {
     setDeadlineOption("");
   };
 
-  const assignUser = (id, user) => {
+  const assignUser = (taskId, user, spaceId) => {
     setList((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, assignedTo: user } : t))
+      prev.map((t) => (t.id === taskId ? { ...t, assignedTo: user } : t))
     );
+
+    // localStorage update
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    const updatedData = data.map((space) => {
+      if (Number(space.id) === Number(spaceId)) {
+        return {
+          ...space,
+          todo: space.todo.map((t) =>
+            t.id === taskId ? { ...t, assignedTo: user } : t
+          ),
+        };
+      }
+      return space;
+    });
+
+    localStorage.setItem("spaceItems", JSON.stringify(updatedData));
     setOpenDropdown(null);
   };
 
-  const setDeadline = (id, date) => {
+  const setDeadline = (taskId, newDate, spaceId) => {
     setList((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, deadline: date } : t))
+      prev.map((t) => (t.id === taskId ? { ...t, deadline: newDate } : t))
     );
+
+    // localStorage update
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    const updatedData = data.map((space) => {
+      if (Number(space.id) === Number(spaceId)) {
+        return {
+          ...space,
+          todo: space.todo.map((t) =>
+            t.id === taskId ? { ...t, deadline: newDate } : t
+          ),
+        };
+      }
+      return space;
+    });
+
+    localStorage.setItem("spaceItems", JSON.stringify(updatedData));
   };
 
   const handleDelete = (id) => {
@@ -146,6 +183,8 @@ export function TodoProvider({ children }) {
 
   const addSubTask = (taskId, subTaskText) => {
     if (!subTaskText.trim()) return;
+
+    // Update the list state
     setList((prev) =>
       prev.map((t) =>
         t.id === taskId
@@ -159,6 +198,30 @@ export function TodoProvider({ children }) {
           : t
       )
     );
+
+    // Also update localStorage
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    const updatedData = data.map((space) => {
+      if (Number(space.id) === Number(selectedSpaceId)) {
+        return {
+          ...space,
+          todo: space.todo.map((t) =>
+            t.id === taskId
+              ? {
+                  ...t,
+                  subTasks: [
+                    ...t.subTasks,
+                    { id: Date.now(), task: subTaskText, status: "Pending" },
+                  ],
+                }
+              : t
+          ),
+        };
+      }
+      return space;
+    });
+
+    localStorage.setItem("spaceItems", JSON.stringify(updatedData));
   };
 
   const toggleSubTaskStatus = (taskId, subTaskId) => {
@@ -265,7 +328,30 @@ export function TodoProvider({ children }) {
     setOpenTodoMenu(null);
   };
 
-  const renderTaskRow = (cur) => (
+  const updateTaskStatus = (taskId, newStatus, spaceId) => {
+    // state update
+    setList((prev) =>
+      prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
+    );
+
+    // localStorage update
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    const updatedData = data.map((space) => {
+      if (Number(space.id) === Number(spaceId)) {
+        return {
+          ...space,
+          todo: space.todo.map((t) =>
+            t.id === taskId ? { ...t, status: newStatus } : t
+          ),
+        };
+      }
+      return space;
+    });
+
+    localStorage.setItem("spaceItems", JSON.stringify(updatedData));
+  };
+
+  const renderTaskRow = (cur, id) => (
     <div
       key={cur.id}
       className="list p-1 px-2 mt-2 text-gray-100 text-sm flex flex-col border-t border-zinc-800 border-b w-full"
@@ -283,31 +369,17 @@ export function TodoProvider({ children }) {
                 )
               }
               className={`w-4 h-4 rounded-full appearance-none border cursor-pointer
-              ${
-                cur.status === "Progress"
-                  ? "bg-purple-600 border-purple-600"
-                  : ""
-              }
-              ${
-                cur.status === "Completed"
-                  ? "bg-green-600 border-green-600"
-                  : ""
-              }
-              ${
-                cur.status === "Pending" ? "bg-transparent border-gray-400" : ""
-              }
-            `}
+      ${cur.status === "Progress" ? "bg-purple-600 border-purple-600" : ""}
+      ${cur.status === "Completed" ? "bg-green-600 border-green-600" : ""}
+      ${cur.status === "Pending" ? "bg-transparent border-gray-400" : ""}
+    `}
             />
 
             {cur.id === openDropdownCheckbox && (
               <div className="absolute left-6 top-6 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg z-50">
                 <button
                   onClick={() => {
-                    setList((prev) =>
-                      prev.map((t) =>
-                        t.id === cur.id ? { ...t, status: "Progress" } : t
-                      )
-                    );
+                    updateTaskStatus(cur.id, "Progress", id);
                     setOpenDropdownCheckbox(null);
                   }}
                   className="block px-4 py-2 text-sm text-white hover:bg-zinc-800 w-full"
@@ -315,7 +387,10 @@ export function TodoProvider({ children }) {
                   Progress
                 </button>
                 <button
-                  onClick={() => handleCompleteCheckbox(cur.id, cur)}
+                  onClick={() => {
+                    updateTaskStatus(cur.id, "Completed", id);
+                    setOpenDropdownCheckbox(null);
+                  }}
                   className="block px-4 py-2 text-sm text-white hover:bg-zinc-800 w-full"
                 >
                   Completed
@@ -323,6 +398,7 @@ export function TodoProvider({ children }) {
               </div>
             )}
           </div>
+
           {edittodoId === cur.id ? (
             <input
               type="text"
@@ -355,7 +431,7 @@ export function TodoProvider({ children }) {
               <div className="absolute z-50">
                 {users.map((user) => (
                   <button
-                    onClick={() => assignUser(cur.id, user)}
+                    onClick={() => assignUser(cur.id, user, id)}
                     className="block w-full bg-black text-left px-3 py-1 text-sm text-white hover:bg-zinc-800"
                     key={user}
                   >
@@ -371,7 +447,7 @@ export function TodoProvider({ children }) {
             <input
               type="date"
               value={cur.deadline}
-              onChange={(e) => setDeadline(cur.id, e.target.value)}
+              onChange={(e) => setDeadline(cur.id, e.target.value, id)}
               min={today}
               className="bg-transparent outline-none text-white text-xs"
             />
@@ -499,6 +575,14 @@ export function TodoProvider({ children }) {
     setCreatedTaskOption(false);
   };
 
+  const getAllTasks = () => {
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    return data.map((space) => ({
+      ...space,
+      todo: space.todo || [],
+    }));
+  };
+
   return (
     <TodoContext.Provider
       value={{
@@ -530,6 +614,9 @@ export function TodoProvider({ children }) {
         forceCompeleteTask,
         handleSpaceClick,
         selectedSpaceId,
+        showAllTasks,
+        allTask,
+        getAllTasks,
       }}
     >
       {children}
