@@ -431,6 +431,11 @@ export function TodoProvider({ children }) {
               type="text"
               value={editingTodoText}
               onChange={(e) => setEditingTodoText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  saveTodo(cur.id);
+                }
+              }}
               className="w-full text-white px-2 py-2 outline-none bg-zinc-800 rounded-md "
             />
           ) : (
@@ -438,10 +443,22 @@ export function TodoProvider({ children }) {
           )}
 
           <button
-            onClick={() => setSubTaskOpen(cur.id)}
+            onClick={() =>
+              setSubTaskOpen((prev) => (prev === cur.id ? null : cur.id))
+            }
             className="absolute top-1/2 -translate-y-1/2 right-2 bg-zinc-700 cursor-pointer text-white px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           >
             +
+          </button>
+
+          <button
+            onClick={() => handleEditTodo(cur.id)}
+            className="absolute top-1/2 -translate-y-1/2 right-10 
+                        bg-zinc-600 
+                        cursor-pointer text-white px-2 py-1 rounded-md shadow-md
+                        opacity-0 group-hover:opacity-100 transition-all duration-300"
+          >
+            <MdOutlineModeEdit size={12} />
           </button>
         </div>
 
