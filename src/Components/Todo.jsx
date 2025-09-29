@@ -30,11 +30,12 @@ export default function Todo({ spaceId }) {
     <div className="w-full h-auto px-5 py-5">
       {progressTasks.length > 0 && (
         <div className="mb-6">
-          <div className="w-full flex justify-between px-2">
+          <div className="w-full flex justify-between">
             <h1 className="text-xl font-semibold text-start">Progress Tasks</h1>
-            <div className="flex text-sm gap-3">
+            <div className="flex text-sm space-x-3.5">
               <div className="p-2 w-[120px]">Assignee</div>
               <div className="p-2 w-[120px]">Due date</div>
+              <div className="p-2 w-[120px]">Priority</div>
               <div className="p-2 w-[120px]">Menu</div>
             </div>
           </div>
@@ -44,11 +45,12 @@ export default function Todo({ spaceId }) {
 
       {completedTask.length > 0 && (
         <div className="mb-6">
-          <div className="w-full flex justify-between px-2">
+          <div className="w-full flex justify-between">
             <h1 className="text-xl font-semibold text-start">Complete Tasks</h1>
-            <div className="flex text-sm gap-3">
+            <div className="flex text-sm space-x-3.5">
               <div className="p-2 w-[120px]">Assignee</div>
               <div className="p-2 w-[120px]">Due date</div>
+              <div className="p-2 w-[120px]">Priority</div>
               <div className="p-2 w-[120px]">Menu</div>
             </div>
           </div>
@@ -56,11 +58,12 @@ export default function Todo({ spaceId }) {
         </div>
       )}
 
-      <div className="w-full flex justify-between px-2">
+      <div className="w-full flex justify-between">
         <h1 className="text-xl font-semibold text-start">Todo App</h1>
-        <div className="flex text-sm gap-3">
+        <div className="flex text-sm space-x-3.5">
           <div className="p-2 w-[120px]">Assignee</div>
           <div className="p-2 w-[120px]">Due date</div>
+          <div className="p-2 w-[120px]">Priority</div>
           <div className="p-2 w-[120px]">Menu</div>
         </div>
       </div>

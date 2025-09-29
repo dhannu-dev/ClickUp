@@ -38,6 +38,7 @@ export default function AllTask() {
                   <div className="flex text-sm gap-3 px-9 font-medium text-zinc-400 mb-2">
                     <div className="p-2 w-[120px] text-center">Assignee</div>
                     <div className="p-2 w-[120px] text-center">Due date</div>
+                    <div className="p-2 w-[120px] text-center">Priority</div>
                     <div className="p-2 w-[120px] text-center">Menu</div>
                   </div>
                 </div>
@@ -57,6 +58,7 @@ export default function AllTask() {
                   <div className="flex text-sm gap-3 px-9 font-medium text-zinc-400 mb-2">
                     <div className="p-2 w-[120px] text-center">Assignee</div>
                     <div className="p-2 w-[120px] text-center">Due date</div>
+                    <div className="p-2 w-[120px] text-center">Priority</div>
                     <div className="p-2 w-[120px] text-center">Menu</div>
                   </div>
                 </div>
@@ -74,6 +76,7 @@ export default function AllTask() {
                   <div className="flex text-sm gap-3 px-9 font-medium text-zinc-400 mb-2">
                     <div className="p-2 w-[120px] text-center">Assignee</div>
                     <div className="p-2 w-[120px] text-center">Due date</div>
+                    <div className="p-2 w-[120px] text-center">Priority</div>
                     <div className="p-2 w-[120px] text-center">Menu</div>
                   </div>
                 </div>

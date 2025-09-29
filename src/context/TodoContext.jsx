@@ -11,6 +11,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { MdDownloadDone } from "react-icons/md";
+import { CiFlag1 } from "react-icons/ci";
 
 export const TodoContext = createContext();
 
@@ -31,6 +32,7 @@ export function TodoProvider({ children }) {
   const [editingTodoText, setEditingTodoText] = useState("");
   const [allTask, setAllTasks] = useState(false);
   const [subTaskOpen, setSubTaskOpen] = useState(null);
+  const [priorityId, setPriorityId] = useState(null);
 
   useEffect(() => {
     const savedId = localStorage.getItem("savedSubtaskId");
@@ -51,8 +53,6 @@ export function TodoProvider({ children }) {
   const showAllTasks = () => {
     setAllTasks(true);
   };
-
-  const users = ["dhannu", "rohit", "rupak", "himanshu"];
 
   // const addTask = () => {
   //   if (!input.trim()) return;
@@ -83,6 +83,7 @@ export function TodoProvider({ children }) {
           status: "Pending",
           assignedTo: "",
           deadline: "",
+          priority: "",
           subTasks: [],
         };
 
@@ -158,6 +159,28 @@ export function TodoProvider({ children }) {
 
     localStorage.setItem("spaceItems", JSON.stringify(updatedData));
     setOpenDropdown(null);
+  };
+
+  const declarePriority = (prioId, prioName, spaceId) => {
+    setList((prev) =>
+      prev.map((t) => (t.id === prioId ? { ...t, priority: prioName } : t))
+    );
+
+    const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
+    const updatedData = data.map((space) => {
+      if (Number(space.id) === Number(spaceId)) {
+        return {
+          ...space,
+          todo: space.todo.map((t) =>
+            t.id === prioId ? { ...t, priority: prioName } : t
+          ),
+        };
+      }
+      return space;
+    });
+
+    localStorage.setItem("spaceItems", JSON.stringify(updatedData));
+    setPriorityId(null);
   };
 
   const setDeadline = (taskId, newDate, spaceId) => {
@@ -369,6 +392,14 @@ export function TodoProvider({ children }) {
     localStorage.setItem("spaceItems", JSON.stringify(updatedData));
   };
 
+  const users = ["dhannu", "rohit", "rupak", "himanshu"];
+  const priortyOption = [
+    { id: 1, name: "Urgent", color: "pink" },
+    { id: 2, name: "High", color: "yellow" },
+    { id: 3, name: "Normal", color: "blue" },
+    { id: 4, name: "Low", color: "white" },
+  ];
+
   const renderTaskRow = (cur, id) => (
     <div
       key={cur.id}
@@ -503,6 +534,44 @@ export function TodoProvider({ children }) {
               className="bg-transparent outline-none text-white text-xs"
             />
           </label>
+
+          <div className="relative">
+            <button
+              onClick={() =>
+                setPriorityId((prev) => (prev === cur.id ? null : cur.id))
+              }
+              className="py-2 px-3 relative text-sm w-[120px] text-start rounded-md hover:bg-zinc-800 text-white flex items-center gap-2"
+            >
+              {cur.priority ? (
+                <CiFlag1
+                  size={18}
+                  color={
+                    priortyOption.find((p) => p.name === cur.priority)?.color ||
+                    "red"
+                  }
+                />
+              ) : (
+                <CiFlag1 size={18} className="text-red-600" />
+              )}
+            </button>
+
+            {cur.id === priorityId && (
+              <div className="p-2 rounded-md bg-zinc-900 min-w-[150px] space-y-2 absolute z-50">
+                {priortyOption.map((prio) => (
+                  <button
+                    className="rounded-md w-full bg-zinc-900 text-left px-3 py-2 text-sm text-white hover:bg-zinc-950 cursor-pointer flex items-center gap-2"
+                    key={prio.id}
+                    onClick={() => {
+                      declarePriority(cur.id, prio.name, id);
+                      setPriorityId(null);
+                    }}
+                  >
+                    <CiFlag1 size={18} color={prio.color} /> {prio.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div className="w-full h-full relative">
             <button
