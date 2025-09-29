@@ -416,8 +416,7 @@ export function TodoProvider({ children }) {
                 </button>
                 <button
                   onClick={() => {
-                    updateTaskStatus(cur.id, "Completed", id);
-                    setOpenDropdownCheckbox(null);
+                    handleCompleteCheckbox(cur.id, cur);
                   }}
                   className="block px-4 py-2 text-sm text-white hover:bg-zinc-800 w-full"
                 >
