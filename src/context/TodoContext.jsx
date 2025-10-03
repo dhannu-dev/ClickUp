@@ -621,7 +621,7 @@ export function TodoProvider({ children }) {
       </div>
 
       {subTaskOpen === cur.id && (
-        <div className="ml-6 mt-2">
+        <div className="ml-6">
           {cur.subTasks.map((sub) => (
             <div
               key={sub.id}
