@@ -15,7 +15,7 @@ export default function AllTask() {
   }, []);
 
   return (
-    <div className="w-full h-auto px-5 py-5 overflow-hidden">
+    <div className="w-full h-auto px-5 py-5">
       {savedSpaces.map((space) => {
         const progressTasks = space.todo.filter((t) => t.status === "Progress");
         const completedTasks = space.todo.filter(
@@ -25,7 +25,7 @@ export default function AllTask() {
 
         return (
           <div
-            className="bg-zinc-900 w-full h-auto rounded-md text-zinc-300 p-5 shadow-lg"
+            className="bg-zinc-900 w-full h-full mt-2 rounded-md text-zinc-300 p-5 shadow-lg"
             key={space.id}
           >
             <h1 className="text-2xl font-bold mb-6">{space.spaceList}</h1>
