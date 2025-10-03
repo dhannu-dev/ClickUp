@@ -38,7 +38,7 @@ function HeroSection2() {
   } = useContext(TodoContext);
 
   return (
-    <div className="w-full h-screen flex px-2 py-1">
+    <div className="w-full h-full flex px-2 py-1">
       <div className="h-full rounded-md p-2 space-y-5  w-[50px] bg-[#1e1e2f]">
         <div className="flex flex-col gap-2 font-semibold">
           <div className="p-2 rounded-md bg-white">
