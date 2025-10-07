@@ -9,6 +9,7 @@ import { RiChatFollowUpLine } from "react-icons/ri";
 import { RiUserFollowLine } from "react-icons/ri";
 import { IoCheckmarkDone } from "react-icons/io5";
 import { IoIosMore } from "react-icons/io";
+import { HiUserGroup } from "react-icons/hi2";
 
 import { MdOutlineFilterList, MdOutlinePeople } from "react-icons/md";
 
@@ -190,6 +191,13 @@ function HeroSection2() {
           <div className="flex items-center gap-3  hover:bg-zinc-800 p-1 rounded-md">
             <IoCheckmarkDone />
             <h2>All Tasks</h2>
+          </div>
+
+          <div className="flex items-center gap-3 cursor-pointer  hover:bg-zinc-800 p-1 rounded-md">
+            <HiUserGroup />
+            <Link href="/teams">
+              <h2>Teams</h2>
+            </Link>
           </div>
 
           <div className="flex items-center gap-3 w-full hover:bg-zinc-800 p-1">

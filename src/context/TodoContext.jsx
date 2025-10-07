@@ -34,6 +34,60 @@ export function TodoProvider({ children }) {
   const [allTask, setAllTasks] = useState(false);
   const [subTaskOpen, setSubTaskOpen] = useState(null);
   const [priorityId, setPriorityId] = useState(null);
+  const [teamOption, setTeamOption] = useState(false);
+  const [memberInput, setMemberInput] = useState("");
+  const [users, setUsers] = useState(["dhannu"]);
+  const [openUserMenu, setOpenUserMenu] = useState(null);
+  const [editUserId, setEditUserId] = useState(null);
+  const [editUser, setEditUser] = useState("");
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("users");
+    if (savedUser) setUsers(JSON.parse(savedUser));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("users", JSON.stringify(users));
+  }, [users]);
+
+  const handleMemberInput = (e) => {
+    setMemberInput(e.target.value);
+  };
+
+  const handleEditUser = (username, id) => {
+    setEditUserId(id);
+    setEditUser(username);
+  };
+
+  const handleDeletedUser = (value) => {
+    setUsers((prev) => prev.filter((cur, idx) => idx !== value));
+    setOpenUserMenu(null);
+  };
+
+  const handleTeamOption = () => {
+    setTeamOption((prev) => !prev);
+  };
+
+  const addMember = () => {
+    if (!memberInput.trim()) return;
+    setUsers((prev) => [...prev, memberInput]);
+    setMemberInput("");
+    setTeamOption(false);
+  };
+
+  const handleOpenUserMenu = (value) => {
+    setOpenUserMenu((prev) => (prev === value ? null : value));
+  };
+
+  const handleSaveEditUser = (index) => {
+    setUsers((prev) =>
+      prev.map((cur, idx) => (idx === index ? editUser : cur))
+    );
+
+    setEditUserId(null);
+    setOpenUserMenu(null);
+    setEditUser("");
+  };
 
   useEffect(() => {
     const savedId = localStorage.getItem("savedSubtaskId");
@@ -393,7 +447,6 @@ export function TodoProvider({ children }) {
     localStorage.setItem("spaceItems", JSON.stringify(updatedData));
   };
 
-  const users = ["dhannu", "rohit", "rupak", "himanshu"];
   const priortyOption = [
     { id: 1, name: "Urgent", color: "pink" },
     { id: 2, name: "High", color: "yellow" },
@@ -743,6 +796,20 @@ export function TodoProvider({ children }) {
         showAllTasks,
         allTask,
         getAllTasks,
+        users,
+        teamOption,
+        handleTeamOption,
+        memberInput,
+        handleMemberInput,
+        addMember,
+        handleOpenUserMenu,
+        openUserMenu,
+        handleDeletedUser,
+        handleEditUser,
+        editUserId,
+        editUser,
+        setEditUser,
+        handleSaveEditUser,
       }}
     >
       {children}
