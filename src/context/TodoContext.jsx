@@ -12,6 +12,7 @@ import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { MdDownloadDone } from "react-icons/md";
 import { CiFlag1 } from "react-icons/ci";
+import Link from "next/link";
 
 export const TodoContext = createContext();
 
@@ -503,7 +504,12 @@ export function TodoProvider({ children }) {
             >
               {cur.assignedTo ? (
                 <div className="w-5 h-5 flex items-center justify-center rounded-full bg-purple-600 text-white text-xs">
-                  {cur.assignedTo.charAt(0).toUpperCase()}
+                  <Link
+                    onClick={(e) => e.stopPropagation()}
+                    href={`/userTasks/${cur.id}`}
+                  >
+                    {cur.assignedTo.charAt(0).toUpperCase()}
+                  </Link>
                 </div>
               ) : (
                 <MdOutlinePeople size={20} />
