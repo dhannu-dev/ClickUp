@@ -40,9 +40,23 @@ export default function Teams() {
     editUser,
     setEditUser,
     handleSaveEditUser,
+    memberInput,
+    handleMemberInput,
+    userEmail,
+    setUserEmail,
+    userPhoneNo,
+    setUserPhoneNo,
+    userStreetAddress,
+    setUserStreetAddress,
+    userCity,
+    setUserCity,
+    userState,
+    setUserState,
+    userDes,
+    setUserDes,
+    addMember,
   } = useContext(TodoContext);
 
-  // Make avatar colors deterministic based on index
   const getAvatarColor = (idx) => avatarColors[idx % avatarColors.length];
 
   return (
@@ -214,43 +228,57 @@ export default function Teams() {
               Create Team Member
             </h1>
 
-            <form className="flex flex-col gap-4">
+            <form onSubmit={addMember} className="flex flex-col gap-4">
               <input
                 type="text"
+                value={memberInput}
+                onChange={handleMemberInput}
                 placeholder="Full Name"
                 className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 required
               />
               <input
                 type="email"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
                 placeholder="Email"
                 className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 required
               />
               <input
                 type="tel"
+                value={userPhoneNo}
+                onChange={(e) => setUserPhoneNo(e.target.value)}
                 placeholder="Phone Number"
                 className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
               />
               <input
                 type="text"
+                value={userStreetAddress}
+                onChange={(e) => setUserStreetAddress(e.target.value)}
                 placeholder="Street Address"
                 className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
               />
               <div className="flex gap-3">
                 <input
                   type="text"
+                  value={userCity}
+                  onChange={(e) => setUserCity(e.target.value)}
                   placeholder="City"
                   className="flex-1 p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
                 <input
                   type="text"
+                  value={userState}
+                  onChange={(e) => setUserState(e.target.value)}
                   placeholder="State"
                   className="flex-1 p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
               </div>
               <textarea
                 rows={4}
+                value={userDes}
+                onChange={(e) => setUserDes(e.target.value)}
                 placeholder="Short Description"
                 className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none transition-all"
               ></textarea>

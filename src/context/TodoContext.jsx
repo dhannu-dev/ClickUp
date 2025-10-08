@@ -40,6 +40,12 @@ export function TodoProvider({ children }) {
   const [openUserMenu, setOpenUserMenu] = useState(null);
   const [editUserId, setEditUserId] = useState(null);
   const [editUser, setEditUser] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPhoneNo, setUserPhoneNo] = useState("");
+  const [userStreetAddress, setUserStreetAddress] = useState("");
+  const [userCity, setUserCity] = useState("");
+  const [userState, setUserState] = useState("");
+  const [userDes, setUserDes] = useState("");
 
   useEffect(() => {
     const savedUser = localStorage.getItem("users");
@@ -68,7 +74,8 @@ export function TodoProvider({ children }) {
     setTeamOption((prev) => !prev);
   };
 
-  const addMember = () => {
+  const addMember = (e) => {
+    e.preventDefault();
     if (!memberInput.trim()) return;
     setUsers((prev) => [...prev, memberInput]);
     setMemberInput("");
@@ -810,6 +817,18 @@ export function TodoProvider({ children }) {
         editUser,
         setEditUser,
         handleSaveEditUser,
+        userEmail,
+        setUserEmail,
+        userPhoneNo,
+        setUserPhoneNo,
+        userStreetAddress,
+        setUserStreetAddress,
+        userCity,
+        setUserCity,
+        userState,
+        setUserState,
+        userDes,
+        setUserDes,
       }}
     >
       {children}
