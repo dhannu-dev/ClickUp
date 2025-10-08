@@ -14,17 +14,24 @@ import {
 } from "react-icons/md";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { FaUserGroup } from "react-icons/fa6";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { TodoContext } from "../../context/TodoContext";
+
+const avatarColors = [
+  "bg-purple-600",
+  "bg-pink-500",
+  "bg-green-500",
+  "bg-blue-500",
+  "bg-yellow-500",
+  "bg-red-500",
+  "bg-indigo-500",
+];
 
 export default function Teams() {
   const {
     users,
     teamOption,
     handleTeamOption,
-    memberInput,
-    handleMemberInput,
-    addMember,
     handleOpenUserMenu,
     openUserMenu,
     handleDeletedUser,
@@ -32,11 +39,15 @@ export default function Teams() {
     editUserId,
     editUser,
     setEditUser,
-    handleSaveEditUser
+    handleSaveEditUser,
   } = useContext(TodoContext);
-  console.log(users);
+
+  // Make avatar colors deterministic based on index
+  const getAvatarColor = (idx) => avatarColors[idx % avatarColors.length];
+
   return (
     <div className="w-full h-full bg-transparent border-t border-t-gray-800 rounded-md">
+      {/* Header */}
       <div className="flex justify-between items-center px-4 py-2 mt-2">
         <h1 className="font-semibold text-lg">Dhannu Kumar's Workspace</h1>
         <div className="flex gap-3">
@@ -49,6 +60,7 @@ export default function Teams() {
         </div>
       </div>
 
+      {/* Views */}
       <div className="flex items-center gap-4 border-b border-gray-800 px-4 py-2 text-sm text-gray-300">
         <div className="flex items-center gap-1 cursor-pointer hover:text-white">
           <CiViewList />
@@ -68,6 +80,7 @@ export default function Teams() {
         </div>
       </div>
 
+      {/* Filters */}
       <div className="flex justify-between items-center px-4 py-2 text-xs text-gray-400">
         <div className="flex gap-3">
           <div className="flex items-center gap-1 px-2 py-1 border border-gray-600 rounded-full">
@@ -103,10 +116,11 @@ export default function Teams() {
         </div>
       </div>
 
+      {/* Teams Header */}
       <div className="flex justify-between items-center py-3 px-4">
         <div className="flex items-center gap-3">
           <FaUserGroup />
-          <h2 className="text-xl font-medium">All Teams Memeber</h2>
+          <h2 className="text-xl font-medium">All Teams Member</h2>
         </div>
         <div>
           <button
@@ -118,70 +132,75 @@ export default function Teams() {
         </div>
       </div>
 
-      <div className="w-full py-2 px-4">
-        {users.map((cur, idx) => (
-          <div
-            key={idx}
-            className="flex items-center justify-between gap-3 py-1 px-3 mb-2 rounded-md bg-zinc-900 text-white hover:bg-zinc-800 transition-all"
-          >
-            <div className="flex items-center gap-3">
-              <span className="flex items-center justify-center w-6 h-6 p-2 text-sm rounded-full bg-purple-600 font-semibold">
-                {cur.charAt(0).toUpperCase()}
-              </span>
-              {editUserId === idx ? (
-                <input
-                  value={editUser}
-                  onChange={(e) => setEditUser(e.target.value)}
-                  className="p-2 outline-none"
-                />
-              ) : (
-                <span className="text-base capitalize">{cur}</span>
-              )}
-            </div>
+      {/* Users List */}
+      <div className="w-full py-2 px-4 flex flex-wrap gap-4">
+        {users.map((cur, idx) => {
+          const avatarColor = getAvatarColor(idx);
 
-            <div className="relative">
-              <button
-                onClick={() => handleOpenUserMenu(idx)}
-                className="p-2 ml-2 relative cursor-pointer w-[50px] text-xs rounded-md hover:bg-zinc-800 text-white"
+          return (
+            <div
+              key={idx}
+              className="w-[250px] bg-zinc-900 text-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-4 flex flex-col items-center gap-4"
+            >
+              <div
+                className={`flex items-center justify-center w-[200px] h-[200px] rounded-2xl text-2xl font-bold ${avatarColor}`}
               >
-                <BsThreeDots size={20} />
-              </button>
+                {cur ? cur.charAt(0).toUpperCase() : "U"}
+              </div>
 
-              {idx === openUserMenu && (
-                <div className="absolute right-[1px] top-10 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg z-50 w-[100px]">
-                  <button
-                    onClick={() => handleEditUser(cur, idx)}
-                    className="block px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 rounded-md w-full"
-                  >
-                    <span className="flex items-center gap-2">
-                      <MdOutlineModeEdit size={15} />
-                      <p className="text-[14px]">Edit</p>
+              <div className="relative w-full px-3 flex justify-between items-center">
+                <span>
+                  {editUserId === idx ? (
+                    <input
+                      value={editUser}
+                      onChange={(e) => setEditUser(e.target.value)}
+                      className="w-full p-2 rounded-md text-black outline-none"
+                    />
+                  ) : (
+                    <span className="text-lg font-semibold capitalize">
+                      {cur}
                     </span>
-                  </button>
-                  {editUserId === idx && (
-                    <button onClick={() => handleSaveEditUser(idx)} className="block px-4 py-2 text-sm text-green-200 hover:bg-zinc-800 rounded-md w-full">
-                      <span className="flex items-center gap-2">
-                        <MdDownloadDone size={16} />
-                        <p className="text-[14px]">Save</p>
-                      </span>
-                    </button>
                   )}
-                  <button
-                    onClick={() => handleDeletedUser(idx)}
-                    className="block px-4 py-2 text-sm text-red-200 rounded-md hover:bg-zinc-800 w-full"
-                  >
-                    <span className="flex items-center gap-2">
-                      <MdDeleteOutline size={15} />
-                      <p className="text-[14px]">Delete</p>
-                    </span>
-                  </button>
-                </div>
-              )}
+                </span>
+
+                <button
+                  onClick={() => handleOpenUserMenu(idx)}
+                  className="p-2 rounded-md hover:bg-zinc-800 transition"
+                >
+                  <BsThreeDots size={20} />
+                </button>
+
+                {idx === openUserMenu && (
+                  <div className="absolute right-0 top-10 bg-zinc-900 border border-zinc-700 rounded-md shadow-lg z-50 w-[120px]">
+                    <button
+                      onClick={() => handleEditUser(cur, idx)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 w-full rounded-md"
+                    >
+                      <MdOutlineModeEdit size={16} /> Edit
+                    </button>
+                    {editUserId === idx && (
+                      <button
+                        onClick={() => handleSaveEditUser(idx)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-green-400 hover:bg-zinc-800 w-full rounded-md"
+                      >
+                        <MdDownloadDone size={16} /> Save
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleDeletedUser(idx)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-zinc-800 w-full rounded-md"
+                    >
+                      <MdDeleteOutline size={16} /> Delete
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
+      {/* New Member Modal */}
       {teamOption && (
         <div
           onClick={handleTeamOption}
@@ -189,38 +208,59 @@ export default function Teams() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-zinc-900 flex flex-col text-white w-auto p-3 rounded-2xl shadow-xl"
+            className="bg-zinc-900 w-[500px] p-6 rounded-3xl shadow-2xl flex flex-col gap-6"
           >
-            <h1 className="text-2xl font-semibold mb-2 text-center mt-1">
+            <h1 className="text-2xl font-bold text-center text-white">
               Create Team Member
             </h1>
 
-            <div className="flex flex-col gap-2 p-3">
-              <div className="flex flex-col gap-1">
-                <label className="text-zinc-300">Team Member Name</label>
+            <form className="flex flex-col gap-4">
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                required
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                required
+              />
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+              />
+              <input
+                type="text"
+                placeholder="Street Address"
+                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+              />
+              <div className="flex gap-3">
                 <input
-                  value={memberInput}
-                  onChange={handleMemberInput}
                   type="text"
-                  className="p-2 rounded-md bg-zinc-800 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-zinc-500 w-[400px]"
+                  placeholder="City"
+                  className="flex-1 p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                />
+                <input
+                  type="text"
+                  placeholder="State"
+                  className="flex-1 p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
               </div>
-
-              <div className="flex flex-col gap-1 mt-2">
-                <label className="text-zinc-300">Add a short description</label>
-                <textarea
-                  rows={4}
-                  className="p-3 rounded-md bg-zinc-800 border border-zinc-700 focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-zinc-500 resize-none"
-                />
-              </div>
-
+              <textarea
+                rows={4}
+                placeholder="Short Description"
+                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none transition-all"
+              ></textarea>
               <button
-                onClick={addMember}
-                className="mt-2 py-2.5 rounded-md bg-purple-600 hover:bg-purple-700 transition-all font-medium text-white"
+                type="submit"
+                className="mt-2 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 transition-all text-white font-bold shadow-lg"
               >
-                Create Members
+                Create Member
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}
