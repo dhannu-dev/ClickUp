@@ -11,7 +11,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { MdDownloadDone } from "react-icons/md";
-import { CiFlag1 } from "react-icons/ci";
+import { IoFlagSharp } from "react-icons/io5";
 import Link from "next/link";
 
 export const TodoContext = createContext();
@@ -76,9 +76,33 @@ export function TodoProvider({ children }) {
 
   const addMember = (e) => {
     e.preventDefault();
-    if (!memberInput.trim()) return;
-    setUsers((prev) => [...prev, memberInput]);
+    if (
+      !memberInput.trim() ||
+      !userEmail ||
+      !userPhoneNo ||
+      !userCity ||
+      !userState
+    )
+      return;
+    setUsers((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        name: memberInput,
+        email: userEmail,
+        phoneNo: userPhoneNo,
+        city: userCity,
+        state: userState,
+        des: userDes,
+      },
+    ]);
+    console.log(users);
     setMemberInput("");
+    setUserPhoneNo("");
+    setUserEmail("");
+    setUserCity("");
+    setUserState("");
+    setUserDes("");
     setTeamOption(false);
   };
 
@@ -88,7 +112,7 @@ export function TodoProvider({ children }) {
 
   const handleSaveEditUser = (index) => {
     setUsers((prev) =>
-      prev.map((cur, idx) => (idx === index ? editUser : cur))
+      prev.map((cur, idx) => (idx === index ? editUser : cur.name))
     );
 
     setEditUserId(null);
@@ -183,17 +207,19 @@ export function TodoProvider({ children }) {
 
   const addCreatedTask = () => {
     if (!createTaskOptionInput.trim()) return;
+
     setList((prev) => [
       ...prev,
       {
         id: Date.now(),
         task: createTaskOptionInput,
         status: "Pending",
-        assignedTo: selectedUser || "",
+        assignedTo: selectedUser?.name || "",
         deadline: deadlineOption || "",
         subTasks: [],
       },
     ]);
+
     setCreatedTaskOptionInput("");
     setCreatedTaskOption(false);
     setSelectedUser("");
@@ -202,17 +228,16 @@ export function TodoProvider({ children }) {
 
   const assignUser = (taskId, user, spaceId) => {
     setList((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, assignedTo: user } : t))
+      prev.map((t) => (t.id === taskId ? { ...t, assignedTo: user.name } : t))
     );
 
-    // localStorage update
     const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
     const updatedData = data.map((space) => {
       if (Number(space.id) === Number(spaceId)) {
         return {
           ...space,
           todo: space.todo.map((t) =>
-            t.id === taskId ? { ...t, assignedTo: user } : t
+            t.id === taskId ? { ...t, assignedTo: user.name } : t
           ),
         };
       }
@@ -416,7 +441,6 @@ export function TodoProvider({ children }) {
     );
     setList(updatedList);
 
-    // Update localStorage too if you are using spaceItems
     const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
     const updatedData = data.map((space) => ({
       ...space,
@@ -432,12 +456,9 @@ export function TodoProvider({ children }) {
   };
 
   const updateTaskStatus = (taskId, newStatus, spaceId) => {
-    // state update
     setList((prev) =>
       prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
     );
-
-    // localStorage update
     const data = JSON.parse(localStorage.getItem("spaceItems")) || [];
     const updatedData = data.map((space) => {
       if (Number(space.id) === Number(spaceId)) {
@@ -576,14 +597,14 @@ export function TodoProvider({ children }) {
               )}
             </button>
             {cur.id === openDropdown && (
-              <div className="absolute z-50">
+              <div className="absolute z-50 rounded-md">
                 {users.map((user) => (
                   <button
                     onClick={() => assignUser(cur.id, user, id)}
-                    className="block w-full bg-black text-left px-3 py-1 text-sm text-white hover:bg-zinc-800"
-                    key={user}
+                    className="block w-auto bg-zinc-950 text-left px-3 py-2 text-white hover:bg-zinc-800 hover:rounded-md"
+                    key={user.id}
                   >
-                    {user}
+                    {user.name}
                   </button>
                 ))}
               </div>
@@ -609,7 +630,7 @@ export function TodoProvider({ children }) {
               className="py-2 px-3 relative text-sm w-[120px] text-start rounded-md hover:bg-zinc-800 text-white flex items-center gap-2"
             >
               {cur.priority ? (
-                <CiFlag1
+                <IoFlagSharp
                   size={18}
                   color={
                     priortyOption.find((p) => p.name === cur.priority)?.color ||
@@ -617,7 +638,7 @@ export function TodoProvider({ children }) {
                   }
                 />
               ) : (
-                <CiFlag1 size={18} className="text-red-600" />
+                <IoFlagSharp size={18} className="text-white" />
               )}
             </button>
 
@@ -632,7 +653,7 @@ export function TodoProvider({ children }) {
                       setPriorityId(null);
                     }}
                   >
-                    <CiFlag1 size={18} color={prio.color} /> {prio.name}
+                    <IoFlagSharp size={18} color={prio.color} /> {prio.name}
                   </button>
                 ))}
               </div>
@@ -803,7 +824,6 @@ export function TodoProvider({ children }) {
         showAllTasks,
         allTask,
         getAllTasks,
-        users,
         teamOption,
         handleTeamOption,
         memberInput,

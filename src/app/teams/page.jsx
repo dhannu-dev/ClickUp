@@ -16,6 +16,8 @@ import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { FaUserGroup } from "react-icons/fa6";
 import { useContext, useState } from "react";
 import { TodoContext } from "../../context/TodoContext";
+import { FaPhone } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 const avatarColors = [
   "bg-purple-600",
@@ -56,6 +58,12 @@ export default function Teams() {
     setUserDes,
     addMember,
   } = useContext(TodoContext);
+
+  const [activeUser, setActiveUser] = useState(null);
+
+  const handleSideBar = (user) => {
+    setActiveUser((prev) => (prev?.id === user.id ? null : user));
+  };
 
   const getAvatarColor = (idx) => avatarColors[idx % avatarColors.length];
 
@@ -145,8 +153,6 @@ export default function Teams() {
           </button>
         </div>
       </div>
-
-      {/* Users List */}
       <div className="w-full py-2 px-4 flex flex-wrap gap-4">
         {users.map((cur, idx) => {
           const avatarColor = getAvatarColor(idx);
@@ -154,12 +160,105 @@ export default function Teams() {
           return (
             <div
               key={idx}
-              className="w-[250px] bg-zinc-900 text-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-4 flex flex-col items-center gap-4"
+              className="w-[250px] h-[250px] bg-zinc-900 text-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow p-4 flex flex-col items-center gap-4"
             >
               <div
+                onClick={() => handleSideBar(cur)}
                 className={`flex items-center justify-center w-[200px] h-[200px] rounded-2xl text-2xl font-bold ${avatarColor}`}
               >
-                {cur ? cur.charAt(0).toUpperCase() : "U"}
+                {cur.name ? cur.name.charAt(0).toUpperCase() : "U"}
+              </div>
+
+              <div className="fixed inset-0 z-50 pointer-events-none">
+                <div
+                  onClick={() => setActiveUser(null)}
+                  className={`absolute inset-0 bg-black/60 transition-opacity duration-500 ease-in-out ${
+                    activeUser ? "opacity-100 pointer-events-auto" : "opacity-0"
+                  }`}
+                ></div>
+                <div
+                  className={`absolute right-0 top-0 h-full w-[480px] bg-zinc-900 text-white p-6 flex flex-col transform transition-all duration-500 ease-in-out shadow-2xl rounded-l-2xl ${
+                    activeUser
+                      ? "translate-x-0 opacity-100 pointer-events-auto"
+                      : "translate-x-full opacity-0"
+                  }`}
+                >
+                  {activeUser && (
+                    <>
+                      <div className="flex flex-col items-center gap-2 mb-6">
+                        <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-4xl font-bold text-white shadow-lg">
+                          {activeUser.name.charAt(0).toUpperCase()}
+                        </div>
+                        <h2 className="text-2xl font-semibold">
+                          {activeUser.name}
+                        </h2>
+                        <p className="text-gray-400 text-sm">Team Member</p>
+                      </div>
+
+                      <hr className="border-gray-700 mb-6" />
+
+                      <div className="flex flex-col gap-5 text-sm">
+                        <div className="flex flex-col gap-2">
+                          <h3 className="font-semibold text-gray-300 uppercase tracking-wide text-xs">
+                            Contact Info
+                          </h3>
+                          <div className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition">
+                            <MdEmail size={19} className="text-yellow-700" />
+
+                            <span>{activeUser.email}</span>
+                          </div>
+                          <div className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition">
+                            <FaPhone size={17} className="text-blue-600" />
+                            <span>{activeUser.phoneNo || "-"}</span>
+                          </div>
+                        </div>
+
+                        {/* Location */}
+                        <div className="flex flex-col gap-2">
+                          <h3 className="font-semibold text-gray-300 uppercase tracking-wide text-xs">
+                            Location
+                          </h3>
+                          <div className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition">
+                            <svg
+                              className="w-5 h-5 text-blue-400"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M12 11c2.21 0 4-1.79 4-4S14.21 3 12 3 8 4.79 8 7s1.79 4 4 4zM12 13v8"
+                              />
+                            </svg>
+                            <span>
+                              {activeUser.city}, {activeUser.state}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Description */}
+                        <div className="flex flex-col gap-2">
+                          <h3 className="font-semibold text-gray-300 uppercase tracking-wide text-xs">
+                            About
+                          </h3>
+                          <p className="p-3 bg-zinc-800 rounded-lg text-gray-300 hover:bg-zinc-700 transition">
+                            {activeUser.des || "No description provided."}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Close Button */}
+                      <button
+                        onClick={() => setActiveUser(null)}
+                        className="mt-auto py-3 px-6 bg-purple-600 hover:bg-purple-700 rounded-md text-white font-semibold shadow-lg transition-all"
+                      >
+                        Close
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
 
               <div className="relative w-full px-3 flex justify-between items-center">
@@ -172,7 +271,7 @@ export default function Teams() {
                     />
                   ) : (
                     <span className="text-lg font-semibold capitalize">
-                      {cur}
+                      {cur.name}
                     </span>
                   )}
                 </span>
