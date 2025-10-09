@@ -18,6 +18,7 @@ import { useContext, useState } from "react";
 import { TodoContext } from "../../context/TodoContext";
 import { FaPhone } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import { FiEye } from "react-icons/fi";
 
 const avatarColors = [
   "bg-purple-600",
@@ -48,21 +49,26 @@ export default function Teams() {
     setUserEmail,
     userPhoneNo,
     setUserPhoneNo,
-    userStreetAddress,
-    setUserStreetAddress,
-    userCity,
-    setUserCity,
-    userState,
-    setUserState,
-    userDes,
-    setUserDes,
     addMember,
+    setOpenUserMenu,
+    userFormData,
+    handleFormChange,
   } = useContext(TodoContext);
 
   const [activeUser, setActiveUser] = useState(null);
+  const [step, setStep] = useState(1);
+
+  const handleNext = () => {
+    setStep((prev) => (prev < 3 ? prev + 1 : prev));
+  };
+
+  const handlePrev = () => {
+    setStep((prev) => (prev > 1 ? prev - 1 : prev));
+  };
 
   const handleSideBar = (user) => {
     setActiveUser((prev) => (prev?.id === user.id ? null : user));
+    setOpenUserMenu(null);
   };
 
   const getAvatarColor = (idx) => avatarColors[idx % avatarColors.length];
@@ -172,7 +178,7 @@ export default function Teams() {
               <div className="fixed inset-0 z-50 pointer-events-none">
                 <div
                   onClick={() => setActiveUser(null)}
-                  className={`absolute inset-0 bg-black/60 transition-opacity duration-500 ease-in-out ${
+                  className={`absolute inset-0 bg-black/20 transition-opacity duration-500 ease-in-out ${
                     activeUser ? "opacity-100 pointer-events-auto" : "opacity-0"
                   }`}
                 ></div>
@@ -300,6 +306,13 @@ export default function Teams() {
                       </button>
                     )}
                     <button
+                      onClick={() => handleSideBar(cur)}
+                      className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-zinc-800 w-full rounded-md"
+                    >
+                      <FiEye size={16} />
+                      Details
+                    </button>
+                    <button
                       onClick={() => handleDeletedUser(idx)}
                       className="flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:bg-zinc-800 w-full rounded-md"
                     >
@@ -319,76 +332,281 @@ export default function Teams() {
           onClick={handleTeamOption}
           className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
         >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-zinc-900 w-[500px] p-6 rounded-3xl shadow-2xl flex flex-col gap-6"
-          >
-            <h1 className="text-2xl font-bold text-center text-white">
-              Create Team Member
-            </h1>
+          {step === 1 && (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-zinc-900 w-full max-w-md p-8 rounded-2xl shadow-xl flex flex-col gap-3 relative"
+            >
+              <h1 className="text-2xl font-semibold text-center text-white">
+                Personal Information <br />
+                <span className="text-[17px] font-normal">
+                  Please provide your basic personal details below
+                </span>
+              </h1>
+              <p className="text-center text-gray-400 text-sm"></p>
 
-            <form onSubmit={addMember} className="flex flex-col gap-4">
-              <input
-                type="text"
-                value={memberInput}
-                onChange={handleMemberInput}
-                placeholder="Full Name"
-                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                required
-              />
-              <input
-                type="email"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
-                placeholder="Email"
-                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                required
-              />
-              <input
-                type="tel"
-                value={userPhoneNo}
-                onChange={(e) => setUserPhoneNo(e.target.value)}
-                placeholder="Phone Number"
-                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-              />
-              <input
-                type="text"
-                value={userStreetAddress}
-                onChange={(e) => setUserStreetAddress(e.target.value)}
-                placeholder="Street Address"
-                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-              />
-              <div className="flex gap-3">
+              <form onSubmit={addMember} className="flex flex-col gap-3">
                 <input
                   type="text"
-                  value={userCity}
-                  onChange={(e) => setUserCity(e.target.value)}
-                  placeholder="City"
-                  className="flex-1 p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                  name="firstName"
+                  value={userFormData.firstName}
+                  onChange={handleFormChange}
+                  placeholder="First Name"
+                  className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                  required
                 />
+
                 <input
                   type="text"
-                  value={userState}
-                  onChange={(e) => setUserState(e.target.value)}
-                  placeholder="State"
-                  className="flex-1 p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                  name="middleName"
+                  value={userFormData.middleName}
+                  onChange={handleFormChange}
+                  placeholder="Middle Name"
+                  className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
+
+                <input
+                  type="text"
+                  name="lastName"
+                  value={userFormData.lastName}
+                  onChange={handleFormChange}
+                  placeholder="Last Name"
+                  className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                />
+
+                <input
+                  type="date"
+                  name="dob"
+                  value={userFormData.dob}
+                  onChange={handleFormChange}
+                  className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                />
+
+                <div className="flex gap-3">
+                  <select
+                    name="gender"
+                    value={userFormData.gender}
+                    onChange={handleFormChange}
+                    className="flex-1 p-3 rounded-lg bg-zinc-800 border border-zinc-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    required
+                  >
+                    <option value="">Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="trans">Trans</option>
+                  </select>
+
+                  <select
+                    name="maritalStatus"
+                    value={userFormData.maritalStatus}
+                    onChange={handleFormChange}
+                    className="flex-1 p-3 rounded-lg bg-zinc-800 border border-zinc-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                  >
+                    <option value="">Marital Status</option>
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced</option>
+                  </select>
+                </div>
+
+                {/* Nationality */}
+                <input
+                  type="text"
+                  name="nationality"
+                  value={userFormData.nationality}
+                  onChange={handleFormChange}
+                  placeholder="Nationality"
+                  className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                />
+              </form>
+
+              {/* Button */}
+              <div className="w-full flex justify-end mt-4">
+                <button
+                  onClick={handleNext}
+                  className="bg-purple-600 hover:bg-purple-700 transition-colors px-6 py-2 rounded-full text-white font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                >
+                  Next
+                </button>
               </div>
-              <textarea
-                rows={4}
-                value={userDes}
-                onChange={(e) => setUserDes(e.target.value)}
-                placeholder="Short Description"
-                className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none transition-all"
-              ></textarea>
-              <button
-                type="submit"
-                className="mt-2 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 transition-all text-white font-bold shadow-lg"
-              >
-                Create Member
-              </button>
-            </form>
-          </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-zinc-900 w-full max-w-md p-8 rounded-3xl shadow-2xl flex flex-col"
+            >
+              <h1 className="text-2xl font-semibold text-white mb-4 flex flex-col items-center">
+                <span>Contact & Address Information</span>
+                <span className="text-sm text-gray-300 mt-1 text-center font-normal">
+                  Please make sure all information is correct before submitting.
+                </span>
+              </h1>
+
+              <form onSubmit={addMember} className="flex flex-col gap-4">
+                <input
+                  type="email"
+                  name="email"
+                  value={userFormData.email}
+                  onChange={handleFormChange}
+                  placeholder="Email"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                  required
+                />
+
+                <input
+                  type="tel"
+                  name="phone"
+                  value={userFormData.phone}
+                  onChange={handleFormChange}
+                  placeholder="Phone Number"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                />
+
+                <input
+                  type="text"
+                  name="address1"
+                  value={userFormData.address1}
+                  onChange={handleFormChange}
+                  placeholder="Address 1"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                  required
+                />
+                <input
+                  type="text"
+                  name="address2"
+                  value={userFormData.address2}
+                  onChange={handleFormChange}
+                  placeholder="Address 2"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                  required
+                />
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="text"
+                    name="city"
+                    value={userFormData.city}
+                    onChange={handleFormChange}
+                    placeholder="City"
+                    className="flex-1 p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                  />
+                  <input
+                    type="text"
+                    name="state"
+                    value={userFormData.state}
+                    onChange={handleFormChange}
+                    placeholder="State"
+                    className="flex-1 p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                  />
+                </div>
+
+                <input
+                  type="text"
+                  name="pincode"
+                  value={userFormData.pincode}
+                  onChange={handleFormChange}
+                  placeholder="Pincode"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                />
+              </form>
+
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  onClick={handlePrev}
+                  className="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all"
+                >
+                  Prev
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-zinc-900 w-full max-w-md p-8 rounded-3xl shadow-2xl flex flex-col gap-4"
+            >
+              <h1 className="text-2xl font-semibold text-center text-white">
+                Employment Information
+                <span className="block font-normal text-sm text-gray-300 mt-1">
+                  Please provide your current employment details accurately.
+                </span>
+              </h1>
+
+              <form onSubmit={addMember} className="flex flex-col gap-4">
+                <input
+                  type="date"
+                  name="employmentStartDate"
+                  value={userFormData.employmentStartDate}
+                  onChange={handleFormChange}
+                  placeholder="Employment Start Date"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                  required
+                />
+
+                <input
+                  type="text"
+                  name="employmentType"
+                  value={userFormData.employmentType}
+                  onChange={handleFormChange}
+                  placeholder="Employment Type"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                  required
+                />
+
+                <input
+                  type="text"
+                  name="jobTitle"
+                  value={userFormData.jobTitle}
+                  onChange={handleFormChange}
+                  placeholder="Job Title"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                />
+
+                <input
+                  type="text"
+                  name="department"
+                  value={userFormData.department}
+                  onChange={handleFormChange}
+                  placeholder="Department"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                />
+
+                <input
+                  type="text"
+                  name="reportingManager"
+                  value={userFormData.reportingManager}
+                  onChange={handleFormChange}
+                  placeholder="Reporting Manager"
+                  className="p-3 rounded-xl bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all shadow-sm w-full"
+                />
+              </form>
+
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  onClick={handlePrev}
+                  className="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all"
+                >
+                  Prev
+                </button>
+                <button
+                  type="submit"
+                  onClick={addMember}
+                  className="px-6 py-2 rounded-full bg-purple-600 hover:bg-purple-700 text-white font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

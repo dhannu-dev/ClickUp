@@ -36,16 +36,40 @@ export function TodoProvider({ children }) {
   const [priorityId, setPriorityId] = useState(null);
   const [teamOption, setTeamOption] = useState(false);
   const [memberInput, setMemberInput] = useState("");
-  const [users, setUsers] = useState(["dhannu"]);
+  const [users, setUsers] = useState([]);
   const [openUserMenu, setOpenUserMenu] = useState(null);
   const [editUserId, setEditUserId] = useState(null);
   const [editUser, setEditUser] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [userPhoneNo, setUserPhoneNo] = useState("");
-  const [userStreetAddress, setUserStreetAddress] = useState("");
-  const [userCity, setUserCity] = useState("");
-  const [userState, setUserState] = useState("");
-  const [userDes, setUserDes] = useState("");
+  const [userFormData, setUserFormData] = useState({
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    dob: "",
+    gender: "",
+    maritalStatus: "",
+    nationality: "",
+
+    // Step 2: Contact Info
+    email: "",
+    phone: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    pincode: "",
+
+    // Step 3: Employment Info
+    employmentStartDate: "",
+    employmentType: "",
+    jobTitle: "",
+    department: "",
+    reportingManager: "",
+  });
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setUserFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   useEffect(() => {
     const savedUser = localStorage.getItem("users");
@@ -74,35 +98,57 @@ export function TodoProvider({ children }) {
     setTeamOption((prev) => !prev);
   };
 
-  const addMember = (e) => {
-    e.preventDefault();
-    if (
-      !memberInput.trim() ||
-      !userEmail ||
-      !userPhoneNo ||
-      !userCity ||
-      !userState
-    )
+  const addMember = () => {
+    if (!userFormData.firstName || !userFormData.email || !userFormData.phone)
       return;
+
     setUsers((prev) => [
       ...prev,
       {
         id: Date.now(),
-        name: memberInput,
-        email: userEmail,
-        phoneNo: userPhoneNo,
-        city: userCity,
-        state: userState,
-        des: userDes,
+        name: `${userFormData.firstName} ${userFormData.middleName} ${userFormData.lastName}`,
+        email: userFormData.email,
+        phoneNo: userFormData.phone,
+        city: userFormData.city,
+        state: userFormData.state,
+        department: userFormData.department,
+        jobTitle: userFormData.jobTitle,
+        dob: userFormData.dob,
+        gender: userFormData.gender,
+        maritalStatus: userFormData.maritalStatus,
+        nationality: userFormData.nationality,
+        address1: userFormData.address1,
+        address2: userFormData.address2,
+        pincode: userFormData.pincode,
+        employmentStartDate: userFormData.employmentStartDate,
+        employmentType: userFormData.employmentType,
+        reportingManager: userFormData.reportingManager,
       },
     ]);
-    console.log(users);
-    setMemberInput("");
-    setUserPhoneNo("");
-    setUserEmail("");
-    setUserCity("");
-    setUserState("");
-    setUserDes("");
+
+    setUserFormData({
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      dob: "",
+      gender: "",
+      maritalStatus: "",
+      nationality: "",
+      email: "",
+      phone: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      pincode: "",
+      employmentStartDate: "",
+      employmentType: "",
+      jobTitle: "",
+      department: "",
+      reportingManager: "",
+    });
+
+    console.log("form submited");
     setTeamOption(false);
   };
 
@@ -139,22 +185,6 @@ export function TodoProvider({ children }) {
   const showAllTasks = () => {
     setAllTasks(true);
   };
-
-  // const addTask = () => {
-  //   if (!input.trim()) return;
-  //   setList((prev) => [
-  //     ...prev,
-  //     {
-  //       id: Date.now(),
-  //       task: input,
-  //       status: "Pending",
-  //       assignedTo: "",
-  //       deadline: "",
-  //       subTasks: [],
-  //     },
-  //   ]);
-  //   setInput("");
-  // };
 
   const addTask = (spaceId) => {
     if (!input.trim()) return;
@@ -837,18 +867,9 @@ export function TodoProvider({ children }) {
         editUser,
         setEditUser,
         handleSaveEditUser,
-        userEmail,
-        setUserEmail,
-        userPhoneNo,
-        setUserPhoneNo,
-        userStreetAddress,
-        setUserStreetAddress,
-        userCity,
-        setUserCity,
-        userState,
-        setUserState,
-        userDes,
-        setUserDes,
+        setOpenUserMenu,
+        userFormData,
+        handleFormChange,
       }}
     >
       {children}
