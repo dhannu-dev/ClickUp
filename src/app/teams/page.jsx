@@ -75,7 +75,6 @@ export default function Teams() {
 
   return (
     <div className="w-full h-full bg-transparent border-t border-t-gray-800 rounded-md">
-      {/* Header */}
       <div className="flex justify-between items-center px-4 py-2 mt-2">
         <h1 className="font-semibold text-lg">Dhannu Kumar's Workspace</h1>
         <div className="flex gap-3">
@@ -88,7 +87,6 @@ export default function Teams() {
         </div>
       </div>
 
-      {/* Views */}
       <div className="flex items-center gap-4 border-b border-gray-800 px-4 py-2 text-sm text-gray-300">
         <div className="flex items-center gap-1 cursor-pointer hover:text-white">
           <CiViewList />
@@ -219,7 +217,6 @@ export default function Teams() {
                           </div>
                         </div>
 
-                        {/* Location */}
                         <div className="flex flex-col gap-2">
                           <h3 className="font-semibold text-gray-300 uppercase tracking-wide text-xs">
                             Location
@@ -244,7 +241,6 @@ export default function Teams() {
                           </div>
                         </div>
 
-                        {/* Description */}
                         <div className="flex flex-col gap-2">
                           <h3 className="font-semibold text-gray-300 uppercase tracking-wide text-xs">
                             About
@@ -255,7 +251,6 @@ export default function Teams() {
                         </div>
                       </div>
 
-                      {/* Close Button */}
                       <button
                         onClick={() => setActiveUser(null)}
                         className="mt-auto py-3 px-6 bg-purple-600 hover:bg-purple-700 rounded-md text-white font-semibold shadow-lg transition-all"
@@ -325,8 +320,6 @@ export default function Teams() {
           );
         })}
       </div>
-
-      {/* New Member Modal */}
       {teamOption && (
         <div
           onClick={handleTeamOption}
@@ -409,7 +402,6 @@ export default function Teams() {
                   </select>
                 </div>
 
-                {/* Nationality */}
                 <input
                   type="text"
                   name="nationality"
@@ -419,8 +411,6 @@ export default function Teams() {
                   className="p-3 rounded-lg bg-zinc-800 border border-zinc-700 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
                 />
               </form>
-
-              {/* Button */}
               <div className="w-full flex justify-end mt-4">
                 <button
                   onClick={handleNext}
