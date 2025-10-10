@@ -43,16 +43,7 @@ export default function Teams() {
     editUser,
     setEditUser,
     handleSaveEditUser,
-    memberInput,
-    handleMemberInput,
-    userEmail,
-    setUserEmail,
-    userPhoneNo,
-    setUserPhoneNo,
-    addMember,
     setOpenUserMenu,
-    userFormData,
-    handleFormChange,
   } = useContext(TodoContext);
 
   const [activeUser, setActiveUser] = useState(null);
@@ -320,7 +311,7 @@ export default function Teams() {
           );
         })}
       </div>
-      {teamOption && (
+      {/* {teamOption && (
         <div
           onClick={handleTeamOption}
           className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
@@ -597,6 +588,323 @@ export default function Teams() {
               </div>
             </div>
           )}
+        </div>
+      )} */}
+
+      {teamOption && (
+        <div className="h-screen z-50 p-5 absolute left-0 top-0 w-full bg-black">
+          <div className="flex flex-col gap-5">
+            <div className="w-full border border-zinc-700 rounded-2xl p-8 shadow-lg bg-gradient-to-b from-zinc-900 to-zinc-950 text-white transition-all duration-300 hover:shadow-purple-500/10">
+              <h1 className="text-2xl font-semibold mb-6 border-b border-zinc-700 pb-2 tracking-wide">
+                Personal Information
+              </h1>
+
+              <div className="flex flex-wrap gap-3">
+                <label className="w-full font-medium text-zinc-300">
+                  Full Name
+                </label>
+
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    First Name
+                  </label>
+                </div>
+
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Middle Name
+                  </label>
+                </div>
+
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Last Name
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <label className="w-full font-medium text-zinc-300">
+                  Personality
+                </label>
+
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <input
+                    type="date"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Date of Birth
+                  </label>
+                </div>
+
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <select
+                    name="gender"
+                    className="p-2.5 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  >
+                    <option className="bg-zinc-800" value="">
+                      Select Gender
+                    </option>
+                    <option className="bg-zinc-800" value="male">
+                      Male
+                    </option>
+                    <option className="bg-zinc-800" value="female">
+                      Female
+                    </option>
+                    <option className="bg-zinc-800" value="trans">
+                      Trans
+                    </option>
+                  </select>
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Gender
+                  </label>
+                </div>
+
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Nationality
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full border border-zinc-700 rounded-2xl p-8 shadow-lg bg-gradient-to-b from-zinc-900 to-zinc-950 text-white transition-all duration-300 hover:shadow-purple-500/10">
+              <h1 className="text-2xl font-semibold mb-6 border-b border-zinc-700 pb-2 tracking-wide">
+                Contact And Address Information
+              </h1>
+
+              <div className="flex flex-wrap gap-3 mb-6">
+                <label className="w-full font-medium text-zinc-300">
+                  Contact
+                </label>
+
+                <div className="flex flex-col flex-1 min-w-[300px] group">
+                  <input
+                    type="email"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Email
+                  </label>
+                </div>
+
+                <div className="flex flex-col flex-1 min-w-[300px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Phone No.
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <label className="w-full font-medium text-zinc-300">
+                  Address
+                </label>
+
+                <div className="flex flex-col flex-1 min-w-[300px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Address 1
+                  </label>
+                </div>
+
+                <div className="flex flex-col flex-1 min-w-[300px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Address 2
+                  </label>
+                </div>
+
+                <div className="flex flex-col flex-1 min-w-[300px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    State
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3 mt-5">
+                <div className="flex flex-col flex-1 min-w-[300px] max-w-[465px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    City
+                  </label>
+                </div>
+
+                <div className="flex flex-col flex-1 min-w-[300px] max-w-[465px] group">
+                  <input
+                    type="text"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Pincode
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="w-full border border-zinc-700 rounded-2xl p-8 shadow-lg bg-gradient-to-b from-zinc-900 to-zinc-950 text-white transition-all duration-300 hover:shadow-purple-500/10 mb-20">
+              <h1 className="text-2xl font-semibold mb-6 border-b border-zinc-700 pb-2 tracking-wide">
+                Employment Details
+              </h1>
+
+              <div className="flex flex-wrap gap-3">
+                <label className="w-full font-medium text-zinc-300">
+                  Employment
+                </label>
+
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <input
+                    type="date"
+                    className="border border-zinc-600 bg-transparent rounded-lg px-3 py-2 text-sm text-zinc-200 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  />
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Employment Start Date
+                  </label>
+                </div>
+
+                {/* Employment Type */}
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <select
+                    name="employmentType"
+                    className="p-2.5 rounded-lg bg-transparent border border-zinc-700 text-zinc-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  >
+                    <option className="bg-zinc-800" value="">
+                      Select Employment Type
+                    </option>
+                    <option className="bg-zinc-800" value="fulltime">
+                      Full-Time
+                    </option>
+                    <option className="bg-zinc-800" value="parttime">
+                      Part-Time
+                    </option>
+                    <option className="bg-zinc-800" value="internship">
+                      Internship
+                    </option>
+                    <option className="bg-zinc-800" value="contract">
+                      Contract
+                    </option>
+                  </select>
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Employment Type
+                  </label>
+                </div>
+
+                {/* Job Title */}
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <select
+                    name="jobTitle"
+                    className="p-2.5 rounded-lg bg-transparent border border-zinc-700 text-zinc-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  >
+                    <option className="bg-zinc-800" value="">
+                      Select Job Title
+                    </option>
+                    <option className="bg-zinc-800" value="frontend">
+                      Frontend Developer
+                    </option>
+                    <option className="bg-zinc-800" value="backend">
+                      Backend Developer
+                    </option>
+                    <option className="bg-zinc-800" value="uiux">
+                      UI/UX Designer
+                    </option>
+                    <option className="bg-zinc-800" value="manager">
+                      Project Manager
+                    </option>
+                  </select>
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Job Title
+                  </label>
+                </div>
+              </div>
+
+              {/* Second Row */}
+              <div className="flex flex-wrap gap-3 mt-5">
+                {/* Department */}
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <select
+                    name="department"
+                    className="p-2.5 rounded-lg bg-transparent border border-zinc-700 text-zinc-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  >
+                    <option className="bg-zinc-800" value="">
+                      Select Department
+                    </option>
+                    <option className="bg-zinc-800" value="hr">
+                      Human Resources
+                    </option>
+                    <option className="bg-zinc-800" value="finance">
+                      Finance
+                    </option>
+                    <option className="bg-zinc-800" value="tech">
+                      Technology
+                    </option>
+                    <option className="bg-zinc-800" value="marketing">
+                      Marketing
+                    </option>
+                  </select>
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Department
+                  </label>
+                </div>
+
+                {/* Reporting Manager */}
+                <div className="flex flex-col flex-1 min-w-[250px] group">
+                  <select
+                    name="reportingManager"
+                    className="p-2.5 rounded-lg bg-transparent border border-zinc-700 text-zinc-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 transition-all group-hover:border-zinc-400"
+                  >
+                    <option className="bg-zinc-800" value="">
+                      Select Reporting Manager
+                    </option>
+                    <option className="bg-zinc-800" value="gautam">
+                      Gautam Sir
+                    </option>
+                    <option className="bg-zinc-800" value="kumal">
+                      Kumal Sir
+                    </option>
+                    <option className="bg-zinc-800" value="rohit">
+                      Rohit Sir
+                    </option>
+                  </select>
+                  <label className="text-xs text-zinc-500 mt-2 text-right group-hover:text-zinc-300">
+                    Reporting Manager
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
