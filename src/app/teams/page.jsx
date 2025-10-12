@@ -19,6 +19,8 @@ import { TodoContext } from "../../context/TodoContext";
 import { FaPhone } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { FiEye } from "react-icons/fi";
+import { IoMailSharp } from "react-icons/io5";
+import { FaPhoneAlt } from "react-icons/fa";
 
 const avatarColors = [
   "bg-purple-600",
@@ -166,83 +168,111 @@ export default function Teams() {
                   }`}
                 ></div>
                 <div
-                  className={`absolute right-0 top-0 h-full w-[480px] bg-zinc-900 text-white p-6 flex flex-col transform transition-all duration-500 ease-in-out shadow-2xl rounded-l-2xl ${
+                  className={`absolute right-0 top-0 h-full w-[480px] bg-zinc-900 text-white p-6 flex flex-col transform transition-all duration-500 ease-in-out shadow-2xl rounded-l-2xl border-l border-zinc-800 ${
                     activeUser
                       ? "translate-x-0 opacity-100 pointer-events-auto"
                       : "translate-x-full opacity-0"
                   }`}
                 >
                   {activeUser && (
-                    <>
-                      <div className="flex flex-col items-center gap-2 mb-6">
-                        <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-500 flex items-center justify-center text-4xl font-bold text-white shadow-lg">
+                    <div className="flex flex-col h-full overflow-y-auto space-y-6 no-scrollbar">
+                      <div className="flex flex-col items-center gap-2 mb-4">
+                        <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-bold shadow-lg">
                           {activeUser.name.charAt(0).toUpperCase()}
                         </div>
-                        <h2 className="text-2xl font-semibold">
+                        <h2 className="text-2xl font-semibold capitalize">
                           {activeUser.name}
                         </h2>
-                        <p className="text-gray-400 text-sm">Team Member</p>
+                        <p className="text-gray-400 text-sm">
+                          {activeUser.jobTitle || "Team Member"}
+                        </p>
                       </div>
 
-                      <hr className="border-gray-700 mb-6" />
-
-                      <div className="flex flex-col gap-5 text-sm">
-                        <div className="flex flex-col gap-2">
-                          <h3 className="font-semibold text-gray-300 uppercase tracking-wide text-xs">
+                      <div className="flex flex-col gap-4">
+                        <div className="bg-zinc-800 rounded-xl p-4 shadow-md hover:bg-zinc-700 transition">
+                          <h3 className="text-indigo-400 font-semibold mb-2">
                             Contact Info
                           </h3>
-                          <div className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition">
-                            <MdEmail size={19} className="text-yellow-700" />
-
-                            <span>{activeUser.email}</span>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition">
-                            <FaPhone size={17} className="text-blue-600" />
-                            <span>{activeUser.phoneNo || "-"}</span>
-                          </div>
+                          <p className="text-gray-200 flex items-center justify-start gap-2">
+                            <IoMailSharp /> {activeUser.email}
+                          </p>
+                          <p className="text-gray-200 flex items-center gap-2">
+                            <FaPhone /> {activeUser.phoneNo || "-"}
+                          </p>
                         </div>
 
-                        <div className="flex flex-col gap-2">
-                          <h3 className="font-semibold text-gray-300 uppercase tracking-wide text-xs">
+                        <div className="bg-zinc-800 rounded-xl p-4 shadow-md hover:bg-zinc-700 transition">
+                          <h3 className="text-purple-400 font-semibold mb-2">
                             Location
                           </h3>
-                          <div className="flex items-center gap-3 p-3 bg-zinc-800 rounded-lg hover:bg-zinc-700 transition">
-                            <svg
-                              className="w-5 h-5 text-blue-400"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 11c2.21 0 4-1.79 4-4S14.21 3 12 3 8 4.79 8 7s1.79 4 4 4zM12 13v8"
-                              />
-                            </svg>
-                            <span>
-                              {activeUser.city}, {activeUser.state}
-                            </span>
-                          </div>
+                          <p className="text-gray-200 ">🏙️ {activeUser.city}</p>
+                          <p className="text-gray-200 ">
+                            🌍 {activeUser.state}
+                          </p>
                         </div>
 
-                        <div className="flex flex-col gap-2">
-                          <h3 className="font-semibold text-gray-300 uppercase tracking-wide text-xs">
-                            About
+                        <div className="bg-zinc-800 rounded-xl p-4 shadow-md hover:bg-zinc-700 transition">
+                          <h3 className="text-green-400 font-semibold mb-2">
+                            Employment Details
                           </h3>
-                          <p className="p-3 bg-zinc-800 rounded-lg text-gray-300 hover:bg-zinc-700 transition">
-                            {activeUser.des || "No description provided."}
+                          <p className="text-gray-200">
+                            💼 Type: {activeUser.employmentType}
+                          </p>
+                          <p className="text-gray-200">
+                            🗓️ Start Date: {activeUser.employmentStartDate}
+                          </p>
+                          <p className="text-gray-200">
+                            👨‍💼 Manager: {activeUser.reportingManager}
+                          </p>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-xl p-4 shadow-md hover:bg-zinc-700 transition">
+                          <h3 className="text-yellow-400 font-semibold mb-2">
+                            Personal Info
+                          </h3>
+                          <p className="text-gray-200">
+                            🎂 DOB: {activeUser.dob}
+                          </p>
+                          <p className="text-gray-200 ml-1">
+                            ⚧{" "}
+                            <span className="ml-1">
+                              {" "}
+                              Gender: {activeUser.gender}
+                            </span>
+                          </p>
+                          <p className="text-gray-200">
+                            💍 Marital Status: {activeUser.maritalStatus}
+                          </p>
+                          <p className="text-gray-200">
+                            🌏 Nationality: {activeUser.nationality}
+                          </p>
+                        </div>
+
+                        <div className="bg-zinc-800 rounded-xl p-4 shadow-md hover:bg-zinc-700 transition">
+                          <h3 className="text-pink-400 font-semibold mb-2">
+                            Address
+                          </h3>
+                          <p className="text-gray-200">
+                            📮 Pincode: {activeUser.pincode}
+                          </p>
+                          <p className="text-gray-200">
+                            🏠 Address 1: {activeUser.address1}
+                          </p>
+                          <p className="text-gray-200">
+                            🏠 Address 2: {activeUser.address2}
                           </p>
                         </div>
                       </div>
 
-                      <button
-                        onClick={() => setActiveUser(null)}
-                        className="mt-auto py-3 px-6 bg-purple-600 hover:bg-purple-700 rounded-md text-white font-semibold shadow-lg transition-all"
-                      >
-                        Close
-                      </button>
-                    </>
+                      <div className="mt-auto pt-4">
+                        <button
+                          onClick={() => setActiveUser(null)}
+                          className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg font-semibold shadow-md hover:opacity-90 transition"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
